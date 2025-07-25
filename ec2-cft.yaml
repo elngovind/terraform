@@ -1,0 +1,234 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'EC2 Instance with Elastic IP and 30GB EBS Volume'
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t3a.small
+    AllowedValues:
+      - t3a.small
+      - t3a.medium
+    Description: EC2 instance type
+    
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Select the subnet where the EC2 instance will be launched
+    
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Select an existing EC2 Key Pair for SSH access
+    
+  InstanceName:
+    Type: String
+    Default: RetailStore-EC2
+    Description: Name tag for the EC2 instance
+    
+  VPCId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select the VPC for the security group
+
+Resources:
+  # IAM Role for EKS Management
+  EKSManagementRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${InstanceName}-EKSManagementRole'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Policies:
+        - PolicyName: EKSAdditionalPermissions
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - eks:*
+                  - ec2:*
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:AttachRolePolicy
+                  - iam:DetachRolePolicy
+                  - iam:CreateInstanceProfile
+                  - iam:DeleteInstanceProfile
+                  - iam:AddRoleToInstanceProfile
+                  - iam:RemoveRoleFromInstanceProfile
+                  - iam:PassRole
+                  - iam:GetRole
+                  - iam:ListRoles
+                  - iam:ListInstanceProfiles
+                  - iam:ListAttachedRolePolicies
+                  - iam:TagRole
+                  - iam:UntagRole
+                  - iam:ListRoleTags
+                  - iam:CreateServiceLinkedRole
+                  - cloudformation:*
+                  - autoscaling:*
+                  - elasticloadbalancing:*
+                Resource: '*'
+      Tags:
+        - Key: Name
+          Value: !Sub '${InstanceName}-EKSRole'
+
+  # Instance Profile
+  EKSManagementInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: !Sub '${InstanceName}-EKSInstanceProfile'
+      Roles:
+        - !Ref EKSManagementRole
+
+  # Security Group
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EC2 instance
+      VpcId: !Ref VPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+          Description: SSH access
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: HTTP access
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: HTTPS access
+      Tags:
+        - Key: Name
+          Value: !Sub '${InstanceName}-SecurityGroup'
+
+  # EC2 Instance
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0f918f7e67a3323f0
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyPairName
+      SubnetId: !Ref SubnetId
+      IamInstanceProfile: !Ref EKSManagementInstanceProfile
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 30
+            DeleteOnTermination: true
+            Encrypted: true
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          
+          # Ubuntu 24.04 EKS Management Server Setup
+          apt update -y
+          apt install -y curl wget git unzip htop
+          
+          # Install AWS CLI v2
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          rm -rf awscliv2.zip aws/
+          
+          # Install kubectl
+          curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.31.7/2025-04-17/bin/linux/amd64/kubectl
+          chmod +x ./kubectl
+          mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl
+          sudo cp ./kubectl /usr/local/bin/kubectl
+          
+          # Install eksctl
+          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+          sudo mv /tmp/eksctl /usr/local/bin
+          
+          # Install Helm
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          
+          # Install SSM Agent
+          snap install amazon-ssm-agent --classic
+          systemctl enable snap.amazon-ssm-agent.amazon-ssm-agent.service
+          systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
+          
+          # Create kubectl config directory for ubuntu user
+          mkdir -p /home/ubuntu/.kube
+          chown ubuntu:ubuntu /home/ubuntu/.kube
+          
+          # Add PATH to ubuntu user's bashrc
+          echo 'export PATH=$HOME/bin:$PATH' >> /home/ubuntu/.bashrc
+          
+          echo "EKS Management Server ${InstanceName} is ready!" > /tmp/instance-ready.txt
+          echo "OS: Ubuntu 24.04" >> /tmp/instance-ready.txt
+          echo "Tools installed: AWS CLI, kubectl, eksctl, helm" >> /tmp/instance-ready.txt
+      Tags:
+        - Key: Name
+          Value: !Ref InstanceName
+        - Key: Environment
+          Value: Development
+        - Key: Purpose
+          Value: EKS-Management-Server
+
+  # Elastic IP
+  ElasticIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      InstanceId: !Ref EC2Instance
+      Tags:
+        - Key: Name
+          Value: !Sub '${InstanceName}-EIP'
+
+
+
+Outputs:
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref EC2Instance
+    Export:
+      Name: !Sub '${AWS::StackName}-InstanceId'
+      
+  ElasticIP:
+    Description: Elastic IP Address
+    Value: !Ref ElasticIP
+    Export:
+      Name: !Sub '${AWS::StackName}-ElasticIP'
+      
+  PublicDNS:
+    Description: Public DNS Name
+    Value: !GetAtt EC2Instance.PublicDnsName
+    Export:
+      Name: !Sub '${AWS::StackName}-PublicDNS'
+      
+  PrivateIP:
+    Description: Private IP Address
+    Value: !GetAtt EC2Instance.PrivateIp
+    Export:
+      Name: !Sub '${AWS::StackName}-PrivateIP'
+      
+  SecurityGroupId:
+    Description: Security Group ID
+    Value: !Ref EC2SecurityGroup
+    Export:
+      Name: !Sub '${AWS::StackName}-SecurityGroupId'
+      
+  IAMRoleArn:
+    Description: IAM Role ARN for EKS Management
+    Value: !GetAtt EKSManagementRole.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-IAMRoleArn'
+      
+  InstanceProfileArn:
+    Description: Instance Profile ARN
+    Value: !GetAtt EKSManagementInstanceProfile.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-InstanceProfileArn'
