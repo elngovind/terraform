@@ -1,5 +1,5 @@
-# Day 2 Lecture Notes: Advanced Terraform Concepts
-## HCL Deep Dive, Variables, Data Types & Dynamic Infrastructure
+# Day 2 Lecture Notes: From Hardcoded to Parameterized Infrastructure
+## Progressive EC2 Configuration with Advanced Terraform Concepts
 
 **Duration:** 120 minutes | **Prerequisites:** Day 1 completed
 
@@ -7,527 +7,762 @@
 
 ## Learning Objectives
 
-- Master HCL syntax: blocks, arguments, and expressions
-- Understand variables, outputs, and data types
-- Implement dynamic expressions and loops
-- Use .tfvars files and variable overriding
-- Build parametrized infrastructure
+- Transform hardcoded EC2 configurations into flexible, parameterized infrastructure
+- Master variables, data types, and validation through practical EC2 examples
+- Implement dynamic expressions, functions, and conditionals
+- Use .tfvars files for environment-specific EC2 deployments
+- Apply production-ready patterns to EC2 infrastructure
 
 ---
 
 ## Quick Recap - Day 1 Summary
 
-### What We Covered Previously
+### What We Learned
+1. **Infrastructure as Code** - Manual setup vs automated deployment
+2. **Terraform Workflow** - init, plan, apply, destroy
+3. **Basic HCL** - Resources, providers, simple configurations
+4. **First EC2 Instance** - Hardcoded AMI, instance type, basic deployment
 
-1. **Infrastructure in DevOps**
-   - Infrastructure includes servers, storage, networking, IAM, monitoring
-   - Analogy: If application is your house, infrastructure is the land, plumbing, wiring
-
-2. **Why IaC Matters**
-   - Manual setup is slow, error-prone, inconsistent
-   - IaC makes infrastructure repeatable, testable, version-controlled
-   - Analogy: Manual setup is like cooking from memory, IaC is like using a recipe
-
-3. **IaC Approaches**
-   - **Declarative** (Terraform): Define what you want
-   - **Imperative** (Ansible): Define how to do it step-by-step
-
-4. **Why Terraform**
-   - Multi-cloud support (AWS, Azure, GCP)
-   - HCL (HashiCorp Configuration Language)
-   - State management
-   - Rich ecosystem of providers and modules
-
-5. **Terraform Architecture**
-   - **Terraform Core:** Parses .tf files and builds plans
-   - **Providers:** Plugins that communicate with platforms
-   - **State File:** Tracks current infrastructure state
-   - **Configuration Files:** Define resources (main.tf, variables.tf)
+### Today's Mission
+Transform this basic EC2 from Day 1 into a flexible, production-ready configuration that can adapt to different environments and requirements.
 
 ---
 
-## 1. HCL Basics - Blocks, Arguments, and Expressions (25 minutes)
+## Step 1: Starting Point - Hardcoded EC2 (10 minutes)
 
-### What is HCL?
+Let's begin with a simple, hardcoded EC2 instance (similar to Day 1):
 
-HCL (HashiCorp Configuration Language) is a declarative, human-readable configuration language used by Terraform to define infrastructure.
+### Create Project Directory
+```bash
+mkdir terraform-ec2-evolution
+cd terraform-ec2-evolution
+```
 
-**Analogy:** HCL is like a recipe book
-- Each block is a recipe (like baking a cake or setting up EC2)
-- Arguments are ingredients and settings (sugar = 1 cup)
-- Expressions are calculations or references (bake_time = base_time * 2)
-
-### Basic HCL Anatomy
-
+### main.tf - Hardcoded Version
 ```hcl
+# Provider configuration
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Hardcoded EC2 instance
 resource "aws_instance" "web" {
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
-}
-```
-
-### 1.1 Blocks
-
-A block is a container for configuration with a type, labels, and body.
-
-**Syntax:**
-```hcl
-block_type "label1" "label2" {
-  argument = value
-}
-```
-
-**Example:**
-```hcl
-resource "aws_instance" "web" {
-  # Configuration goes here
-}
-```
-
-- `resource` = block type
-- `"aws_instance"` = first label (resource type)
-- `"web"` = second label (resource name)
-
-**Common Block Types:**
-- `resource` - Define cloud resources
-- `provider` - Configure cloud provider
-- `variable` - Define input parameters
-- `output` - Display values after apply
-- `module` - Reuse configurations
-
-### 1.2 Arguments
-
-Arguments are key-value pairs inside blocks that define configuration.
-
-**Syntax:**
-```hcl
-key = value
-```
-
-**Examples:**
-```hcl
-instance_type = "t2.micro"
-ami           = "ami-12345678"
-count         = 3
-```
-
-**Important Notes:**
-- Arguments are order-independent
-- Values can be strings, numbers, booleans, lists, maps, or expressions
-
-### 1.3 Expressions
-
-Expressions are anything Terraform evaluates to produce a value.
-
-**Examples:**
-```hcl
-# Variable reference
-name = var.instance_name
-
-# String interpolation
-name = "web-${var.environment}"
-
-# Function calls
-tags = {
-  Name = "web-${upper(var.environment)}"
-}
-
-# Conditional expression
-instance_type = var.environment == "prod" ? "t3.large" : "t3.micro"
-```
-
----
-
-## 2. Dynamic Expressions in Terraform (20 minutes)
-
-### 2.1 Functions
-
-Terraform provides built-in functions for transforming and calculating values.
-
-**Common Functions:**
-
-| Category | Examples |
-|----------|----------|
-| String | `upper()`, `lower()`, `replace()`, `trim()` |
-| Numeric | `max()`, `min()`, `floor()`, `ceil()` |
-| Collections | `length()`, `join()`, `lookup()`, `merge()` |
-| Encoding | `base64encode()`, `base64decode()` |
-| Date/Time | `timestamp()`, `formatdate()` |
-
-**Examples:**
-```hcl
-# Count resources dynamically
-count = length(var.subnet_ids)
-
-# Transform strings
-name = upper(var.environment)
-
-# Join lists
-availability_zones = join(",", var.az_list)
-```
-
-### 2.2 Conditional Expressions
-
-Terraform supports ternary-style conditions:
-
-**Syntax:**
-```hcl
-<condition> ? <true_value> : <false_value>
-```
-
-**Examples:**
-```hcl
-# Environment-based instance sizing
-instance_type = var.env == "prod" ? "t3.medium" : "t3.micro"
-
-# Enable features conditionally
-monitoring_enabled = var.env == "prod" ? true : false
-
-# Resource count based on environment
-instance_count = var.env == "prod" ? 3 : 1
-```
-
-### 2.3 Loops
-
-Terraform provides two main loop constructs: `count` and `for_each`.
-
-#### Using count
-
-Use `count` for N identical copies of a resource.
-
-```hcl
-resource "aws_instance" "web" {
-  count         = 3
-  ami           = "ami-123456"
+  ami           = "ami-0c02fb55956c7d316"  # Amazon Linux 2
   instance_type = "t2.micro"
   
   tags = {
-    Name = "Web-${count.index}"
+    Name = "my-web-server"
   }
 }
-```
 
-- Creates 3 EC2 instances
-- `count.index` provides 0-based index (0, 1, 2)
-
-#### Using for_each
-
-Use `for_each` for looping over maps or sets with specific keys/values.
-
-```hcl
-resource "aws_s3_bucket" "buckets" {
-  for_each = toset(["app1", "app2", "app3"])
-  bucket   = "my-bucket-${each.value}"
+# Output the public IP
+output "instance_ip" {
+  value = aws_instance.web.public_ip
 }
 ```
 
-- `each.value` gives current item in the set
-- `each.key` gives the key (same as value for sets)
+### Deploy the Hardcoded Version
+```bash
+terraform init
+terraform plan
+terraform apply
+```
 
-**When to Use:**
-- **count:** Identical resources, need index access
-- **for_each:** Named/keyed resources, looping over maps/sets
+**Problems with this approach:**
+- AMI ID is hardcoded (won't work in different regions)
+- Instance type is fixed
+- Can't easily change for different environments
+- No flexibility for scaling or modifications
 
 ---
 
-## 3. Terraform Variables and Outputs (25 minutes)
+## Step 2: Introducing Variables - Making EC2 Flexible (15 minutes)
 
-### 3.1 Input Variables
+Let's make our EC2 instance configurable using variables.
 
-Input variables make Terraform configurations flexible and reusable.
-
-**Basic Syntax:**
+### variables.tf - Define Input Variables
 ```hcl
+# Region variable
 variable "region" {
-  description = "AWS region to deploy resources"
+  description = "AWS region for EC2 deployment"
   type        = string
   default     = "us-east-1"
 }
-```
 
-**Variable Types:**
-```hcl
-# String
-variable "region" {
-  type = string
+# Instance type variable
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
 }
 
-# Number
-variable "instance_count" {
-  type = number
+# Instance name variable
+variable "instance_name" {
+  description = "Name tag for the EC2 instance"
+  type        = string
+  default     = "terraform-web-server"
 }
 
-# Boolean
-variable "enable_monitoring" {
-  type = bool
-}
-
-# List
-variable "availability_zones" {
-  type = list(string)
-}
-
-# Map
-variable "instance_types" {
-  type = map(string)
+# Environment variable
+variable "environment" {
+  description = "Environment (dev, staging, prod)"
+  type        = string
+  default     = "dev"
 }
 ```
 
-**Using Variables:**
+### main.tf - Using Variables
 ```hcl
+# Provider using variable
 provider "aws" {
   region = var.region
 }
 
+# Data source to get latest Amazon Linux AMI
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+  
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
+# EC2 instance using variables
 resource "aws_instance" "web" {
-  count         = var.instance_count
-  instance_type = var.instance_types[var.environment]
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = var.instance_type
+  
+  tags = {
+    Name        = var.instance_name
+    Environment = var.environment
+  }
 }
 ```
 
-### 3.2 Variable Validation
-
-Add validation rules to ensure correct input values:
-
+### outputs.tf - Structured Outputs
 ```hcl
-variable "environment" {
+output "instance_details" {
+  description = "EC2 instance information"
+  value = {
+    id         = aws_instance.web.id
+    public_ip  = aws_instance.web.public_ip
+    private_ip = aws_instance.web.private_ip
+    ami_id     = aws_instance.web.ami
+    type       = aws_instance.web.instance_type
+  }
+}
+
+output "instance_url" {
+  description = "URL to access the instance"
+  value       = "http://${aws_instance.web.public_ip}"
+}
+```
+
+### Test the Parameterized Version
+```bash
+# Plan with default values
+terraform plan
+
+# Apply with custom values
+terraform apply -var="instance_type=t3.small" -var="instance_name=my-custom-server"
+```
+
+**Benefits achieved:**
+- Dynamic AMI selection (works in any region)
+- Configurable instance type
+- Flexible naming
+- Environment awareness
+
+---
+
+## Step 3: Variable Validation - Making EC2 Configuration Safe (10 minutes)
+
+Add validation to ensure only valid values are used for our EC2 instance.
+
+### Enhanced variables.tf with Validation
+```hcl
+variable "region" {
+  description = "AWS region for EC2 deployment"
   type        = string
-  description = "Environment name"
+  default     = "us-east-1"
+  
+  validation {
+    condition     = can(regex("^[a-z0-9-]+$", var.region))
+    error_message = "Region must be a valid AWS region identifier."
+  }
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+  
+  validation {
+    condition = contains([
+      "t2.micro", "t2.small", "t2.medium",
+      "t3.micro", "t3.small", "t3.medium"
+    ], var.instance_type)
+    error_message = "Instance type must be a valid EC2 type from the allowed list."
+  }
+}
+
+variable "environment" {
+  description = "Environment (dev, staging, prod)"
+  type        = string
+  default     = "dev"
   
   validation {
     condition     = contains(["dev", "staging", "prod"], var.environment)
     error_message = "Environment must be dev, staging, or prod."
   }
 }
-```
 
-### 3.3 Output Variables
-
-Outputs expose useful information after Terraform applies configuration.
-
-**Syntax:**
-```hcl
-output "instance_ip" {
-  description = "Public IP of EC2 instance"
-  value       = aws_instance.web.public_ip
-  sensitive   = false
+variable "instance_name" {
+  description = "Name tag for the EC2 instance"
+  type        = string
+  default     = "terraform-web-server"
+  
+  validation {
+    condition     = length(var.instance_name) > 0 && length(var.instance_name) <= 255
+    error_message = "Instance name must be between 1 and 255 characters."
+  }
 }
 ```
 
-**Use Cases:**
-- Debugging and verification
-- Passing values to other modules
-- Integration with CI/CD pipelines
+### Test Validation
+```bash
+# This will fail validation
+terraform plan -var="instance_type=invalid-type"
+
+# This will pass validation
+terraform plan -var="instance_type=t3.small"
+```
 
 ---
 
-## 4. Terraform Data Types (15 minutes)
+## Step 4: Data Types and Complex Variables (15 minutes)
 
-### 4.1 Primitive Types
+Let's explore different data types using EC2 configuration examples.
 
-| Type | Description | Example |
-|------|-------------|---------|
-| `string` | Text values | `"us-east-1"` |
-| `number` | Numeric values | `5`, `2.5` |
-| `bool` | Boolean values | `true`, `false` |
-
-### 4.2 Collection Types
-
-| Type | Description | Example |
-|------|-------------|---------|
-| `list` | Ordered sequence | `["a", "b", "c"]` |
-| `map` | Key-value pairs | `{key = "value"}` |
-| `set` | Unique values | `["a", "b"]` (no duplicates) |
-
-### 4.3 Structural Types
-
-| Type | Description | Example |
-|------|-------------|---------|
-| `object` | Named attributes | `{name = string, count = number}` |
-| `tuple` | Fixed-length mixed types | `["us-east-1", 3, true]` |
-
-**Complex Example:**
+### Advanced variables.tf with Different Data Types
 ```hcl
-variable "server_config" {
-  type = object({
-    name     = string
-    cpu      = number
-    is_linux = bool
-    tags     = map(string)
-  })
+# String variable (we already have these)
+variable "instance_name" {
+  type = string
+  default = "web-server"
+}
+
+# Number variable for instance count
+variable "instance_count" {
+  description = "Number of EC2 instances to create"
+  type        = number
+  default     = 1
   
+  validation {
+    condition     = var.instance_count >= 1 && var.instance_count <= 10
+    error_message = "Instance count must be between 1 and 10."
+  }
+}
+
+# Boolean variable for monitoring
+variable "enable_monitoring" {
+  description = "Enable detailed monitoring for EC2 instances"
+  type        = bool
+  default     = false
+}
+
+# List variable for security group ports
+variable "allowed_ports" {
+  description = "List of ports to allow in security group"
+  type        = list(number)
+  default     = [80, 443, 22]
+}
+
+# Map variable for instance types per environment
+variable "instance_types" {
+  description = "Instance types for different environments"
+  type        = map(string)
   default = {
-    name     = "web-server"
-    cpu      = 4
-    is_linux = true
-    tags     = {
-      Environment = "dev"
-      Owner       = "team"
+    dev     = "t2.micro"
+    staging = "t2.small"
+    prod    = "t3.medium"
+  }
+}
+
+# Object variable for EC2 configuration
+variable "ec2_config" {
+  description = "EC2 instance configuration"
+  type = object({
+    instance_type    = string
+    monitoring       = bool
+    backup_required  = bool
+    storage_size     = number
+  })
+  default = {
+    instance_type   = "t2.micro"
+    monitoring      = false
+    backup_required = false
+    storage_size    = 8
+  }
+}
+```
+
+### Using Complex Variables in main.tf
+```hcl
+# Security group using list variable
+resource "aws_security_group" "web" {
+  name_prefix = "${var.instance_name}-sg"
+  
+  # Dynamic ingress rules using list
+  dynamic "ingress" {
+    for_each = var.allowed_ports
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
     }
+  }
+  
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  tags = {
+    Name = "${var.instance_name}-sg"
+  }
+}
+
+# EC2 instances using count and map variables
+resource "aws_instance" "web" {
+  count = var.instance_count
+  
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = var.instance_types[var.environment]
+  
+  vpc_security_group_ids = [aws_security_group.web.id]
+  monitoring             = var.enable_monitoring
+  
+  # Root block device using object variable
+  root_block_device {
+    volume_size = var.ec2_config.storage_size
+    volume_type = "gp3"
+    encrypted   = true
+  }
+  
+  tags = {
+    Name        = "${var.instance_name}-${count.index + 1}"
+    Environment = var.environment
+    Monitoring  = var.enable_monitoring
+    Backup      = var.ec2_config.backup_required
   }
 }
 ```
 
 ---
 
-## 5. Terraform Console - Practical Examples (10 minutes)
+## Step 5: Conditional Logic - Environment-Specific EC2 Behavior (15 minutes)
 
-Terraform console is an interactive REPL for testing expressions.
+Add conditional logic to make EC2 instances behave differently based on environment.
 
-**Usage:**
-```bash
-terraform console
-```
-
-**Examples:**
-
+### Conditional Expressions in main.tf
 ```hcl
-# List indexing
-> ["dev", "qa", "prod"][1]
-"qa"
+# Local values for environment-specific logic
+locals {
+  # Environment-specific configurations
+  env_config = {
+    dev = {
+      instance_count   = 1
+      instance_type    = "t2.micro"
+      monitoring       = false
+      backup_enabled   = false
+      storage_size     = 8
+    }
+    staging = {
+      instance_count   = 2
+      instance_type    = "t2.small"
+      monitoring       = true
+      backup_enabled   = true
+      storage_size     = 16
+    }
+    prod = {
+      instance_count   = 3
+      instance_type    = "t3.medium"
+      monitoring       = true
+      backup_enabled   = true
+      storage_size     = 32
+    }
+  }
+  
+  # Current environment configuration
+  current_config = local.env_config[var.environment]
+  
+  # Common tags
+  common_tags = {
+    Environment = var.environment
+    Project     = "terraform-learning"
+    ManagedBy   = "terraform"
+    CreatedDate = formatdate("YYYY-MM-DD", timestamp())
+  }
+}
 
-# Map access
-> {dev = "t2.micro", prod = "t3.medium"}["prod"]
-"t3.medium"
+# EC2 instances with conditional configuration
+resource "aws_instance" "web" {
+  count = local.current_config.instance_count
+  
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = local.current_config.instance_type
+  
+  vpc_security_group_ids = [aws_security_group.web.id]
+  monitoring             = local.current_config.monitoring
+  
+  root_block_device {
+    volume_size = local.current_config.storage_size
+    volume_type = "gp3"
+    encrypted   = var.environment == "prod" ? true : false
+  }
+  
+  # Conditional user data (install monitoring agent only in prod)
+  user_data = var.environment == "prod" ? base64encode(file("user_data_prod.sh")) : base64encode(file("user_data_dev.sh"))
+  
+  tags = merge(local.common_tags, {
+    Name = "${var.instance_name}-${var.environment}-${count.index + 1}"
+    Tier = "web"
+  })
+}
 
-# Functions
-> upper("hello")
-"HELLO"
+# Conditional CloudWatch alarms (only for production)
+resource "aws_cloudwatch_metric_alarm" "high_cpu" {
+  count = var.environment == "prod" ? local.current_config.instance_count : 0
+  
+  alarm_name          = "${var.instance_name}-high-cpu-${count.index + 1}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "120"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "This metric monitors ec2 cpu utilization"
+  
+  dimensions = {
+    InstanceId = aws_instance.web[count.index].id
+  }
+  
+  tags = local.common_tags
+}
 
-> length(["a", "b", "c"])
-3
-
-# Conditional
-> "prod" == "dev" ? "large" : "small"
-"small"
+# Conditional backup (only for staging and prod)
+resource "aws_backup_vault" "ec2_backup" {
+  count = contains(["staging", "prod"], var.environment) ? 1 : 0
+  
+  name        = "${var.instance_name}-backup-vault"
+  kms_key_arn = aws_kms_key.backup[0].arn
+  
+  tags = local.common_tags
+}
 ```
 
 ---
 
-## 6. .tfvars Files and Variable Overriding (15 minutes)
+## Step 6: Functions and Expressions (10 minutes)
 
-### 6.1 Creating .tfvars Files
+Use Terraform functions to make EC2 configuration more dynamic.
 
-Separate configuration from code using .tfvars files:
-
-**terraform.tfvars:**
+### Functions in Action
 ```hcl
-region        = "us-west-2"
-instance_type = "t3.medium"
+# Using functions for dynamic configuration
+locals {
+  # String functions
+  instance_name_upper = upper(var.instance_name)
+  instance_name_clean = replace(var.instance_name, "_", "-")
+  
+  # Collection functions
+  total_instances = length(aws_instance.web)
+  port_count      = length(var.allowed_ports)
+  
+  # Conditional functions
+  storage_size = var.environment == "prod" ? 50 : 20
+  
+  # Date functions
+  deployment_date = formatdate("YYYY-MM-DD", timestamp())
+  
+  # Network functions (for advanced scenarios)
+  subnet_cidrs = [for i in range(3) : cidrsubnet("10.0.0.0/16", 8, i)]
+}
+
+# Using functions in resource configuration
+resource "aws_instance" "web" {
+  count = local.current_config.instance_count
+  
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = local.current_config.instance_type
+  
+  tags = {
+    Name         = "${local.instance_name_clean}-${var.environment}-${format("%02d", count.index + 1)}"
+    Environment  = upper(var.environment)
+    DeployedOn   = local.deployment_date
+    InstanceNum  = "${count.index + 1} of ${local.current_config.instance_count}"
+  }
+}
+```
+
+---
+
+## Step 7: .tfvars Files - Environment-Specific EC2 Deployments (15 minutes)
+
+Create environment-specific configuration files for our EC2 infrastructure.
+
+### dev.tfvars
+```hcl
+# Development environment configuration
+region        = "us-east-1"
+environment   = "dev"
+instance_name = "dev-web-server"
+
+# Development-specific settings
+instance_count   = 1
+enable_monitoring = false
+allowed_ports    = [80, 22, 8080]  # Extra port for development
+
+# Development EC2 configuration
+ec2_config = {
+  instance_type   = "t2.micro"
+  monitoring      = false
+  backup_required = false
+  storage_size    = 8
+}
+
+instance_types = {
+  dev     = "t2.micro"
+  staging = "t2.small"
+  prod    = "t3.medium"
+}
+```
+
+### staging.tfvars
+```hcl
+# Staging environment configuration
+region        = "us-east-1"
+environment   = "staging"
+instance_name = "staging-web-server"
+
+# Staging-specific settings
+instance_count   = 2
+enable_monitoring = true
+allowed_ports    = [80, 443, 22]
+
+# Staging EC2 configuration
+ec2_config = {
+  instance_type   = "t2.small"
+  monitoring      = true
+  backup_required = true
+  storage_size    = 16
+}
+
+instance_types = {
+  dev     = "t2.micro"
+  staging = "t2.small"
+  prod    = "t3.medium"
+}
+```
+
+### prod.tfvars
+```hcl
+# Production environment configuration
+region        = "us-west-2"  # Different region for prod
 environment   = "prod"
+instance_name = "prod-web-server"
+
+# Production-specific settings
+instance_count   = 3
+enable_monitoring = true
+allowed_ports    = [80, 443]  # Only necessary ports
+
+# Production EC2 configuration
+ec2_config = {
+  instance_type   = "t3.medium"
+  monitoring      = true
+  backup_required = true
+  storage_size    = 32
+}
+
+instance_types = {
+  dev     = "t2.micro"
+  staging = "t2.small"
+  prod    = "t3.medium"
+}
 ```
 
-### 6.2 Using .tfvars Files
+---
 
+## Step 8: Terraform Console - Testing EC2 Expressions (10 minutes)
+
+Use Terraform console to test expressions before applying them.
+
+### Console Examples
 ```bash
-# Explicit file
-terraform apply -var-file="prod.tfvars"
+# Start Terraform console
+terraform console
 
-# Auto-loading (terraform.tfvars or *.auto.tfvars)
-terraform apply
+# Test variable access
+> var.instance_name
+"terraform-web-server"
+
+# Test environment-specific logic
+> var.environment == "prod" ? "t3.large" : "t2.micro"
+"t2.micro"
+
+# Test list operations
+> length(var.allowed_ports)
+3
+
+# Test map access
+> var.instance_types["prod"]
+"t3.medium"
+
+# Test functions
+> upper(var.environment)
+"DEV"
+
+# Test complex expressions
+> [for port in var.allowed_ports : "Port ${port}"]
+[
+  "Port 80",
+  "Port 443", 
+  "Port 22"
+]
+
+# Test conditional logic
+> var.environment == "prod" ? 3 : 1
+1
 ```
 
-### 6.3 Variable Precedence
+---
 
-Terraform follows this order (highest to lowest precedence):
+## Step 9: Deployment with Different Configurations (10 minutes)
 
-1. CLI `-var` flags
-2. CLI `-var-file` flags  
+Deploy the same EC2 infrastructure with different configurations.
+
+### Deploy Development Environment
+```bash
+# Plan development deployment
+terraform plan -var-file="dev.tfvars"
+
+# Apply development configuration
+terraform apply -var-file="dev.tfvars"
+
+# Check outputs
+terraform output
+```
+
+### Deploy Staging Environment
+```bash
+# Switch to staging workspace (optional)
+terraform workspace new staging
+terraform workspace select staging
+
+# Plan staging deployment
+terraform plan -var-file="staging.tfvars"
+
+# Apply staging configuration
+terraform apply -var-file="staging.tfvars"
+```
+
+### Compare Environments
+```bash
+# Compare what would be different in production
+terraform plan -var-file="prod.tfvars"
+
+# Notice the differences:
+# - Different region
+# - More instances
+# - Larger instance types
+# - Additional monitoring
+# - Backup enabled
+```
+
+---
+
+## Step 10: Variable Precedence Testing (10 minutes)
+
+Understand how Terraform resolves variable values.
+
+### Variable Precedence Order (highest to lowest)
+1. Command line `-var` flags
+2. Command line `-var-file` flags
 3. Environment variables (`TF_VAR_name`)
 4. `terraform.tfvars` or `*.auto.tfvars`
 5. Default values in `variables.tf`
 
-**Example:**
+### Testing Precedence
 ```bash
-# This overrides all other sources
-terraform apply -var="region=eu-central-1"
+# Set environment variable
+export TF_VAR_instance_type="t3.small"
+
+# This will use t3.small from environment variable
+terraform plan -var-file="dev.tfvars"
+
+# This will override with t2.medium from command line
+terraform plan -var-file="dev.tfvars" -var="instance_type=t2.medium"
+
+# Clean up environment variable
+unset TF_VAR_instance_type
 ```
 
 ---
 
-## 7. Hands-On Demo: Parametrized EC2 + VPC (10 minutes)
+## Key Concepts Summary
 
-### Project Structure
-```
-terraform-variables-demo/
-├── main.tf              # Resource definitions
-├── variables.tf         # Input variables
-├── outputs.tf           # Output variables
-└── dev.tfvars          # Environment values
-```
+### Evolution of Our EC2 Configuration
 
-### Key Concepts Demonstrated
+1. **Hardcoded** → Fixed AMI, instance type, region
+2. **Variables** → Flexible configuration with defaults
+3. **Validation** → Safe input values
+4. **Data Types** → Complex configurations (lists, maps, objects)
+5. **Conditionals** → Environment-specific behavior
+6. **Functions** → Dynamic value computation
+7. **.tfvars** → Environment separation
+8. **Console** → Expression testing
+9. **Precedence** → Variable resolution understanding
 
-1. **Variable Types:** String, list, map, object
-2. **Loops:** `for_each` for subnets and instances
-3. **Expressions:** Dynamic tagging and naming
-4. **Outputs:** Return useful infrastructure data
+### Production-Ready Patterns Achieved
 
-**Sample Configuration:**
-```hcl
-# Create multiple subnets using for_each
-resource "aws_subnet" "public" {
-  for_each = toset(var.public_subnet_cidrs)
-  
-  vpc_id     = aws_vpc.main.id
-  cidr_block = each.value
-  
-  tags = {
-    Name = "public-subnet-${each.key}"
-  }
-}
+- **Environment Separation** - Different configs for dev/staging/prod
+- **Input Validation** - Prevent invalid configurations
+- **Conditional Resources** - Environment-specific features
+- **Dynamic Configuration** - Computed values and expressions
+- **Flexible Deployment** - Same code, different environments
 
-# Create instances from object list
-resource "aws_instance" "web" {
-  for_each = {
-    for i, inst in var.instances :
-    inst.name => inst
-  }
-  
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  
-  tags = merge(var.tags, {
-    Name = each.key
-    Environment = var.env
-  })
-}
+---
+
+## Next Steps
+
+Now that you understand how to parameterize EC2 infrastructure:
+
+1. **Practice** - Try different variable combinations
+2. **Extend** - Add more conditional logic
+3. **Modularize** - Convert to reusable modules
+4. **Scale** - Apply patterns to complex infrastructure
+
+---
+
+## Cleanup
+
+```bash
+# Destroy all environments
+terraform destroy -var-file="dev.tfvars"
+terraform workspace select staging
+terraform destroy -var-file="staging.tfvars"
 ```
 
 ---
 
-## Key Takeaways
+**You've successfully transformed a simple, hardcoded EC2 instance into a flexible, parameterized, production-ready infrastructure configuration!**
 
-### Today's Concepts Summary
-
-| Concept | Summary |
-|---------|---------|
-| **HCL Basics** | Blocks, arguments, expressions - building blocks of infrastructure code |
-| **Input Variables** | Make code reusable across regions and environments |
-| **Output Variables** | Return useful information like IPs and IDs |
-| **Data Types** | Strings, lists, maps, objects - structure your data properly |
-| **Dynamic Expressions** | Functions, conditionals, loops for smart infrastructure |
-| **Terraform Console** | Interactive testing of expressions and data structures |
-| **.tfvars Files** | Clean separation between logic and configuration |
-
-### Best Practices Learned
-
-1. **Use appropriate data types** for variables
-2. **Validate inputs** with validation blocks
-3. **Separate environments** with .tfvars files
-4. **Use for_each** for named resources
-5. **Use count** for identical resources
-6. **Test expressions** in terraform console
-7. **Document variables** with descriptions
-
----
-
-## Next Session Preview
-
-In the next session, we'll apply these concepts hands-on by:
-- Building a complete modular e-commerce infrastructure
-- Creating reusable modules
-- Implementing environment-specific configurations
-- Using advanced Terraform patterns
-
-**Continue to:** [Modular Architecture Guide](02-modular-guide.md)
+This progression from hardcoded to parameterized infrastructure demonstrates the power of Terraform's variable system and prepares you for building complex, reusable infrastructure as code.
