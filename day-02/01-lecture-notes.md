@@ -63,9 +63,27 @@ output "instance_ip" {
 
 ### Deploy the Hardcoded Version
 ```bash
+# Initialize Terraform
 terraform init
+
+# Validate configuration
+terraform validate
+
+# Format code
+terraform fmt
+
+# Plan deployment
 terraform plan
+
+# Apply configuration
 terraform apply
+
+# Verify deployment
+terraform show
+terraform output
+
+# Check AWS console or CLI
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name,InstanceType]' --output table
 ```
 
 **Problems with this approach:**
@@ -73,6 +91,18 @@ terraform apply
 - Instance type is fixed
 - Can't easily change for different environments
 - No flexibility for scaling or modifications
+
+**Validation Commands:**
+```bash
+# Test the problems
+echo "Testing hardcoded limitations..."
+
+# Try to use in different region (will fail)
+terraform plan -var="region=us-west-2"
+
+# Check if AMI exists in different region
+aws ec2 describe-images --region us-west-2 --image-ids ami-0c02fb55956c7d316 2>/dev/null || echo "❌ AMI not found in us-west-2"
+```
 
 ---
 
@@ -162,11 +192,34 @@ output "instance_url" {
 
 ### Test the Parameterized Version
 ```bash
+# Validate new configuration
+terraform validate
+
 # Plan with default values
 terraform plan
 
+# Test with different variables
+echo "Testing variable flexibility..."
+
+# Test different instance types
+terraform plan -var="instance_type=t3.small"
+terraform plan -var="instance_type=t2.medium"
+
+# Test different environments
+terraform plan -var="environment=staging"
+terraform plan -var="environment=prod"
+
+# Test different regions (should work now)
+terraform plan -var="region=us-west-2"
+
 # Apply with custom values
 terraform apply -var="instance_type=t3.small" -var="instance_name=my-custom-server"
+
+# Verify the changes
+terraform output instance_details
+
+# Compare with previous state
+terraform show | grep -E "(ami|instance_type|tags)"
 ```
 
 **Benefits achieved:**
@@ -174,6 +227,16 @@ terraform apply -var="instance_type=t3.small" -var="instance_name=my-custom-serv
 - Configurable instance type
 - Flexible naming
 - Environment awareness
+
+**Validation Tests:**
+```bash
+# Test cross-region functionality
+echo "Testing cross-region deployment..."
+for region in us-east-1 us-west-2 eu-west-1; do
+    echo "Testing region: $region"
+    terraform plan -var="region=$region" | grep "data.aws_ami.amazon_linux"
+done
+```
 
 ---
 
@@ -233,11 +296,63 @@ variable "instance_name" {
 
 ### Test Validation
 ```bash
-# This will fail validation
-terraform plan -var="instance_type=invalid-type"
+# Test validation with invalid values
+echo "Testing variable validation..."
 
-# This will pass validation
-terraform plan -var="instance_type=t3.small"
+# This will fail validation - invalid instance type
+echo "Testing invalid instance type:"
+terraform plan -var="instance_type=invalid-type" 2>&1 | grep -A3 "Error:"
+
+# This will fail validation - invalid environment
+echo "Testing invalid environment:"
+terraform plan -var="environment=invalid-env" 2>&1 | grep -A3 "Error:"
+
+# This will fail validation - invalid region format
+echo "Testing invalid region:"
+terraform plan -var="region=INVALID_REGION" 2>&1 | grep -A3 "Error:"
+
+# This will fail validation - empty instance name
+echo "Testing empty instance name:"
+terraform plan -var="instance_name=" 2>&1 | grep -A3 "Error:"
+
+# These will pass validation
+echo "Testing valid values:"
+terraform plan -var="instance_type=t3.small" | grep "Plan:"
+terraform plan -var="environment=prod" | grep "Plan:"
+terraform plan -var="region=us-west-2" | grep "Plan:"
+
+# Validate configuration syntax
+terraform validate
+echo "✅ Configuration validation passed"
+```
+
+**Advanced Validation Testing:**
+```bash
+# Create validation test script
+cat > test_validation.sh << 'EOF'
+#!/bin/bash
+echo "=== VARIABLE VALIDATION TESTS ==="
+
+# Test all invalid values
+invalid_tests=(
+    "instance_type=m5.invalid"
+    "environment=testing"
+    "region=invalid-region-123"
+    "instance_name=$(printf '%*s' 300 | tr ' ' 'a')"  # Too long name
+)
+
+for test in "${invalid_tests[@]}"; do
+    echo "Testing: $test"
+    if terraform plan -var="$test" >/dev/null 2>&1; then
+        echo "❌ FAILED: Should have rejected $test"
+    else
+        echo "✅ PASSED: Correctly rejected $test"
+    fi
+done
+EOF
+
+chmod +x test_validation.sh
+./test_validation.sh
 ```
 
 ---
@@ -364,6 +479,74 @@ resource "aws_instance" "web" {
 }
 ```
 
+### Test Complex Data Types
+```bash
+# Test different data types
+echo "Testing complex data types..."
+
+# Test number variable
+terraform plan -var="instance_count=3" | grep "3 to add"
+
+# Test boolean variable
+terraform plan -var="enable_monitoring=true" | grep "monitoring"
+
+# Test list variable
+terraform plan -var='allowed_ports=[80,443,8080]' | grep "ingress"
+
+# Test map variable access
+terraform console << 'EOF'
+var.instance_types["prod"]
+var.instance_types["dev"]
+keys(var.instance_types)
+EOF
+
+# Test object variable access
+terraform console << 'EOF'
+var.ec2_config.instance_type
+var.ec2_config.storage_size
+var.ec2_config.monitoring
+EOF
+
+# Validate complex configuration
+terraform validate
+terraform plan -var="instance_count=2" -var="environment=prod"
+```
+
+**Data Type Validation Script:**
+```bash
+# Create data type testing script
+cat > test_data_types.sh << 'EOF'
+#!/bin/bash
+echo "=== DATA TYPE TESTING ==="
+
+# Test each data type
+echo "Testing string type:"
+terraform console <<< 'var.instance_name'
+
+echo "Testing number type:"
+terraform console <<< 'var.instance_count'
+
+echo "Testing boolean type:"
+terraform console <<< 'var.enable_monitoring'
+
+echo "Testing list type:"
+terraform console <<< 'var.allowed_ports'
+terraform console <<< 'length(var.allowed_ports)'
+
+echo "Testing map type:"
+terraform console <<< 'var.instance_types'
+terraform console <<< 'keys(var.instance_types)'
+
+echo "Testing object type:"
+terraform console <<< 'var.ec2_config'
+terraform console <<< 'var.ec2_config.storage_size'
+EOF
+
+chmod +x test_data_types.sh
+./test_data_types.sh
+```
+```
+
 ---
 
 ## Step 5: Conditional Logic - Environment-Specific EC2 Behavior (15 minutes)
@@ -376,6 +559,160 @@ Add conditional logic to make EC2 instances behave differently based on environm
 locals {
   # Environment-specific configurations
   env_config = {
+    dev = {
+      instance_count   = 1
+      instance_type    = "t2.micro"
+      monitoring       = false
+      backup_enabled   = false
+      storage_size     = 8
+    }
+    staging = {
+      instance_count   = 2
+      instance_type    = "t2.small"
+      monitoring       = true
+      backup_enabled   = true
+      storage_size     = 16
+    }
+    prod = {
+      instance_count   = 3
+      instance_type    = "t3.medium"
+      monitoring       = true
+      backup_enabled   = true
+      storage_size     = 32
+    }
+  }
+  
+  # Current environment configuration
+  current_config = local.env_config[var.environment]
+  
+  # Common tags
+  common_tags = {
+    Environment = var.environment
+    Project     = "terraform-learning"
+    ManagedBy   = "terraform"
+    CreatedDate = formatdate("YYYY-MM-DD", timestamp())
+  }
+}
+
+# EC2 instances with conditional configuration
+resource "aws_instance" "web" {
+  count = local.current_config.instance_count
+  
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = local.current_config.instance_type
+  
+  vpc_security_group_ids = [aws_security_group.web.id]
+  monitoring             = local.current_config.monitoring
+  
+  root_block_device {
+    volume_size = local.current_config.storage_size
+    volume_type = "gp3"
+    encrypted   = var.environment == "prod" ? true : false
+  }
+  
+  # Conditional user data (install monitoring agent only in prod)
+  user_data = var.environment == "prod" ? base64encode(file("user_data_prod.sh")) : base64encode(file("user_data_dev.sh"))
+  
+  tags = merge(local.common_tags, {
+    Name = "${var.instance_name}-${var.environment}-${count.index + 1}"
+    Tier = "web"
+  })
+}
+
+# Conditional CloudWatch alarms (only for production)
+resource "aws_cloudwatch_metric_alarm" "high_cpu" {
+  count = var.environment == "prod" ? local.current_config.instance_count : 0
+  
+  alarm_name          = "${var.instance_name}-high-cpu-${count.index + 1}"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "120"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "This metric monitors ec2 cpu utilization"
+  
+  dimensions = {
+    InstanceId = aws_instance.web[count.index].id
+  }
+  
+  tags = local.common_tags
+}
+
+# Conditional backup (only for staging and prod)
+resource "aws_backup_vault" "ec2_backup" {
+  count = contains(["staging", "prod"], var.environment) ? 1 : 0
+  
+  name        = "${var.instance_name}-backup-vault"
+  kms_key_arn = aws_kms_key.backup[0].arn
+  
+  tags = local.common_tags
+}
+```
+
+### Test Conditional Logic
+```bash
+# Test environment-specific behavior
+echo "Testing conditional logic..."
+
+# Test development environment
+echo "=== DEVELOPMENT ENVIRONMENT ==="
+terraform plan -var="environment=dev" | grep -E "(Plan:|instance_count|monitoring)"
+
+# Test staging environment
+echo "=== STAGING ENVIRONMENT ==="
+terraform plan -var="environment=staging" | grep -E "(Plan:|instance_count|monitoring)"
+
+# Test production environment
+echo "=== PRODUCTION ENVIRONMENT ==="
+terraform plan -var="environment=prod" | grep -E "(Plan:|instance_count|monitoring|alarm|backup)"
+
+# Test conditional expressions in console
+terraform console << 'EOF'
+# Test environment-specific values
+local.env_config["dev"].instance_count
+local.env_config["prod"].instance_count
+
+# Test conditional expressions
+var.environment == "prod" ? "encrypted" : "not-encrypted"
+contains(["staging", "prod"], "prod")
+contains(["staging", "prod"], "dev")
+EOF
+```
+
+**Conditional Logic Testing Script:**
+```bash
+# Create conditional testing script
+cat > test_conditionals.sh << 'EOF'
+#!/bin/bash
+echo "=== CONDITIONAL LOGIC TESTING ==="
+
+for env in dev staging prod; do
+    echo "\n--- Testing $env environment ---"
+    
+    # Count resources that would be created
+    plan_output=$(terraform plan -var="environment=$env" 2>/dev/null)
+    
+    # Extract plan summary
+    echo "$plan_output" | grep "Plan:" || echo "No changes"
+    
+    # Check for environment-specific resources
+    if [[ "$env" == "prod" ]]; then
+        echo "Checking for prod-only resources:"
+        echo "$plan_output" | grep -q "aws_cloudwatch_metric_alarm" && echo "✅ CloudWatch alarms found" || echo "❌ No CloudWatch alarms"
+        echo "$plan_output" | grep -q "encrypted.*true" && echo "✅ Encryption enabled" || echo "❌ No encryption"
+    fi
+    
+    if [[ "$env" == "staging" || "$env" == "prod" ]]; then
+        echo "$plan_output" | grep -q "aws_backup_vault" && echo "✅ Backup vault found" || echo "❌ No backup vault"
+    fi
+done
+EOF
+
+chmod +x test_conditionals.sh
+./test_conditionals.sh
+``` {
     dev = {
       instance_count   = 1
       instance_type    = "t2.micro"
@@ -948,14 +1285,25 @@ Deploy the same EC2 infrastructure with different configurations.
 
 ### Deploy Development Environment
 ```bash
+# Validate configuration first
+terraform validate
+
 # Plan development deployment
+echo "Planning development environment..."
 terraform plan -var-file="dev.tfvars"
 
 # Apply development configuration
+echo "Applying development environment..."
 terraform apply -var-file="dev.tfvars"
 
 # Check outputs
+echo "Development environment outputs:"
 terraform output
+
+# Verify deployment
+echo "Verifying deployment:"
+terraform state list
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name,InstanceType,Tags[?Key==`Environment`].Value|[0]]' --output table
 ```
 
 ### Deploy Staging Environment
@@ -965,15 +1313,67 @@ terraform workspace new staging
 terraform workspace select staging
 
 # Plan staging deployment
+echo "Planning staging environment..."
 terraform plan -var-file="staging.tfvars"
 
+# Show differences from dev
+echo "Comparing staging vs dev:"
+terraform plan -var-file="staging.tfvars" | grep -E "(Plan:|instance_type|region)"
+
 # Apply staging configuration
+echo "Applying staging environment..."
 terraform apply -var-file="staging.tfvars"
+
+# Verify staging deployment
+echo "Staging environment verification:"
+terraform output
+terraform state list | wc -l
 ```
 
 ### Compare Environments
 ```bash
+# Create environment comparison script
+cat > compare_all_environments.sh << 'EOF'
+#!/bin/bash
+echo "=== ENVIRONMENT COMPARISON ==="
+
+for env in dev staging prod; do
+    echo "\n--- $env Environment ---"
+    plan_output=$(terraform plan -var-file="${env}.tfvars" 2>/dev/null)
+    
+    # Extract key information
+    echo "$plan_output" | grep "Plan:" || echo "No changes"
+    
+    # Show resource counts
+    instance_count=$(echo "$plan_output" | grep -c "aws_instance.web\[")
+    echo "EC2 Instances: $instance_count"
+    
+    # Show instance types
+    echo "$plan_output" | grep "instance_type" | head -1
+    
+    # Show region
+    echo "$plan_output" | grep "region" | head -1
+    
+    # Check for conditional resources
+    if echo "$plan_output" | grep -q "aws_cloudwatch_metric_alarm"; then
+        echo "✅ Monitoring enabled"
+    else
+        echo "❌ No monitoring"
+    fi
+    
+    if echo "$plan_output" | grep -q "aws_backup_vault"; then
+        echo "✅ Backup enabled"
+    else
+        echo "❌ No backup"
+    fi
+done
+EOF
+
+chmod +x compare_all_environments.sh
+./compare_all_environments.sh
+
 # Compare what would be different in production
+echo "\nDetailed production comparison:"
 terraform plan -var-file="prod.tfvars"
 
 # Notice the differences:
@@ -1001,17 +1401,59 @@ Understand how Terraform resolves variable values.
 
 ### Testing Precedence
 ```bash
+# Create precedence testing script
+cat > test_precedence.sh << 'EOF'
+#!/bin/bash
+echo "=== VARIABLE PRECEDENCE TESTING ==="
+
+# Test 1: Default value (lowest precedence)
+echo "\n1. Testing default value:"
+terraform console <<< 'var.instance_type'
+
+# Test 2: tfvars file
+echo "\n2. Testing tfvars file value:"
+terraform plan -var-file="dev.tfvars" | grep "instance_type" | head -1
+
+# Test 3: Environment variable
+echo "\n3. Testing environment variable:"
+export TF_VAR_instance_type="t3.small"
+terraform console <<< 'var.instance_type'
+echo "Environment variable set to: $TF_VAR_instance_type"
+
+# Test 4: Command line (highest precedence)
+echo "\n4. Testing command line override:"
+terraform plan -var="instance_type=t2.medium" | grep "instance_type" | head -1
+
+# Test 5: Multiple sources
+echo "\n5. Testing multiple sources (CLI should win):"
+terraform plan -var-file="dev.tfvars" -var="instance_type=t3.large" | grep "instance_type" | head -1
+
+# Cleanup
+unset TF_VAR_instance_type
+echo "\nPrecedence testing completed."
+EOF
+
+chmod +x test_precedence.sh
+./test_precedence.sh
+
+# Manual testing
+echo "\nManual precedence testing:"
+
 # Set environment variable
 export TF_VAR_instance_type="t3.small"
+echo "Environment variable set to: $TF_VAR_instance_type"
 
 # This will use t3.small from environment variable
-terraform plan -var-file="dev.tfvars"
+echo "Testing environment variable precedence:"
+terraform plan -var-file="dev.tfvars" | grep "instance_type" | head -1
 
 # This will override with t2.medium from command line
-terraform plan -var-file="dev.tfvars" -var="instance_type=t2.medium"
+echo "Testing command line override:"
+terraform plan -var-file="dev.tfvars" -var="instance_type=t2.medium" | grep "instance_type" | head -1
 
 # Clean up environment variable
 unset TF_VAR_instance_type
+echo "Environment variable cleared."
 ```
 
 ---
@@ -1056,10 +1498,56 @@ Now that you understand how to parameterize EC2 infrastructure:
 ## Cleanup
 
 ```bash
-# Destroy all environments
+# Create cleanup script for all environments
+cat > cleanup_all.sh << 'EOF'
+#!/bin/bash
+echo "=== CLEANING UP ALL ENVIRONMENTS ==="
+
+# Cleanup development
+echo "\nCleaning up development environment..."
+terraform workspace select default
+terraform destroy -var-file="dev.tfvars" -auto-approve
+
+# Cleanup staging
+if terraform workspace list | grep -q staging; then
+    echo "\nCleaning up staging environment..."
+    terraform workspace select staging
+    terraform destroy -var-file="staging.tfvars" -auto-approve
+    terraform workspace select default
+    terraform workspace delete staging
+fi
+
+# Verify cleanup
+echo "\nVerifying cleanup..."
+terraform state list || echo "No resources in state"
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output table | grep -v terminated || echo "No running instances"
+
+echo "\nCleanup completed!"
+EOF
+
+chmod +x cleanup_all.sh
+./cleanup_all.sh
+
+# Manual cleanup commands
+echo "Manual cleanup commands:"
+
+# Destroy development environment
+echo "Destroying development environment..."
 terraform destroy -var-file="dev.tfvars"
-terraform workspace select staging
-terraform destroy -var-file="staging.tfvars"
+
+# Switch to staging and destroy
+if terraform workspace list | grep -q staging; then
+    echo "Destroying staging environment..."
+    terraform workspace select staging
+    terraform destroy -var-file="staging.tfvars"
+    terraform workspace select default
+    terraform workspace delete staging
+fi
+
+# Final verification
+echo "Final verification:"
+terraform state list
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output table
 ```
 
 ---
