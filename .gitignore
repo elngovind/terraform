@@ -1,13 +1,10 @@
 # Terraform files
 *.tfstate
 *.tfstate.*
-*.tfvars
+*.tfplan
+*.tfvars.backup
 .terraform/
 .terraform.lock.hcl
-
-# OS files
-.DS_Store
-Thumbs.db
 
 # IDE files
 .vscode/
@@ -15,5 +12,17 @@ Thumbs.db
 *.swp
 *.swo
 
+# OS files
+.DS_Store
+Thumbs.db
+
 # Logs
 *.log
+
+# Backup files
+*.backup
+*.bak
+
+# Temporary files
+*.tmp
+*.temp

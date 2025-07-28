@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform Advanced Concepts - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .tab-btn:hover, .tab-btn.active {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .concept-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block::before {
+            content: attr(data-lang);
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #4a5568;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .interactive-demo {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .demo-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .demo-output {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin-top: 10px;
+        }
+        
+        .data-type-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .data-type-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .hands-on-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .file-structure {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #e17055;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .summary-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Terraform Advanced Concepts</h1>
+            <p>Master HCL, Variables, Data Types & Infrastructure as Code</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('recap')">📚 Quick Recap</button>
+            <button class="tab-btn" onclick="showTab('hcl')">🔧 HCL Basics</button>
+            <button class="tab-btn" onclick="showTab('variables')">📝 Variables</button>
+            <button class="tab-btn" onclick="showTab('datatypes')">🎯 Data Types</button>
+            <button class="tab-btn" onclick="showTab('console')">💻 Console Demo</button>
+            <button class="tab-btn" onclick="showTab('tfvars')">⚙️ TFVars</button>
+            <button class="tab-btn" onclick="showTab('handson')">🛠️ Hands-On</button>
+            <button class="tab-btn" onclick="showTab('summary')">✅ Summary</button>
+        </div>
+        
+        <!-- Quick Recap Section -->
+        <div id="recap" class="content-section active">
+            <h2>📚 Quick Recap - Previous Lecture</h2>
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h3>🏗️ Infrastructure in DevOps</h3>
+                    <p>Everything that supports application deployment—servers, storage, networking, IAM, monitoring</p>
+                    <em>Analogy: If app is your house, infrastructure is the land, plumbing, wiring</em>
+                </div>
+                <div class="concept-card">
+                    <h3>📋 Why IaC Matters</h3>
+                    <p>Manual setup is slow, error-prone, inconsistent. IaC makes it repeatable, testable, version-controlled</p>
+                    <em>Manual = Grandma's memory recipe, IaC = Professional chef's written recipe</em>
+                </div>
+                <div class="concept-card">
+                    <h3>🎯 Terraform Architecture</h3>
+                    <p>Core + Providers + State File + Configuration Files</p>
+                    <em>Terraform = Architect, Providers = Contractors, State = Construction logbook</em>
+                </div>
+                <div class="concept-card">
+                    <h3>⚡ Key Commands</h3>
+                    <p>init → plan → apply → destroy</p>
+                    <em>Like Git commands for infrastructure lifecycle</em>
+                </div>
+            </div>
+        </div>
+        
+        <!-- HCL Basics Section -->
+        <div id="hcl" class="content-section">
+            <h2>🔧 HCL Basics - Blocks, Arguments, Expressions</h2>
+            
+            <div class="highlight">
+                <h3>🍰 HCL is like a Recipe Book</h3>
+                <p><strong>Blocks</strong> = Recipes | <strong>Arguments</strong> = Ingredients | <strong>Expressions</strong> = Calculations</p>
+            </div>
+            
+            <h3>1. Blocks</h3>
+            <div class="code-block" data-lang="HCL">
+resource "aws_instance" "web" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+}
+
+# Block Structure:
+# block_type "label1" "label2" {
+#   argument = value
+# }</div>
+            
+            <h3>2. Arguments</h3>
+            <div class="code-block" data-lang="HCL">
+instance_type = "t2.micro"
+# ↑ key        ↑ value
+
+# Arguments are key-value pairs
+# Order-independent
+# Values can be strings, numbers, booleans, lists, maps</div>
+            
+            <h3>3. Expressions</h3>
+            <div class="code-block" data-lang="HCL">
+name = "web-${var.environment}"
+# ↑ String interpolation expression
+
+tags = {
+  Name = "web-${upper(var.environment)}"
+}
+# ↑ Function call expression</div>
+        </div>
+        
+        <!-- Variables Section -->
+        <div id="variables" class="content-section">
+            <h2>📝 Terraform Variables & Outputs</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h3>🔤 Input Variables</h3>
+                    <p>Like function parameters - customize configurations without changing source code</p>
+                    <strong>Cookie Recipe Analogy:</strong> Flour, sugar, butter are your inputs
+                </div>
+                <div class="concept-card">
+                    <h3>📤 Output Variables</h3>
+                    <p>Return useful values after Terraform applies - like product labels showing what you made</p>
+                    <strong>Result:</strong> Public IPs, DNS names, ARNs
+                </div>
+            </div>
+            
+            <h3>Input Variable Example</h3>
+            <div class="code-block" data-lang="variables.tf">
+variable "region" {
+  description = "AWS region to deploy resources"
+  type        = string
+  default     = "us-east-1"
+}
+
+# Usage in other files:
+provider "aws" {
+  region = var.region
+}</div>
+            
+            <h3>Output Variable Example</h3>
+            <div class="code-block" data-lang="outputs.tf">
+output "ec2_public_ip" {
+  description = "Public IP of EC2 instance"
+  value       = aws_instance.web.public_ip
+}
+
+# Terminal Output:
+# ec2_public_ip = "54.123.45.67"</div>
+            
+            <h3>Ways to Pass Variables</h3>
+            <div class="code-block" data-lang="bash">
+# Via CLI
+terraform apply -var="instance_type=t3.micro"
+
+# Via .tfvars file
+terraform apply -var-file="prod.tfvars"
+
+# Via Environment Variables
+export TF_VAR_instance_type="t3.micro"</div>
+        </div>
+        
+        <!-- Data Types Section -->
+        <div id="datatypes" class="content-section">
+            <h2>🎯 Terraform Data Types</h2>
+            
+            <div class="data-type-showcase">
+                <div class="data-type-card">
+                    <h3>string</h3>
+                    <code>"us-east-1"</code>
+                    <p>Text values</p>
+                </div>
+                <div class="data-type-card">
+                    <h3>number</h3>
+                    <code>5, 2.5</code>
+                    <p>Integers, floats</p>
+                </div>
+                <div class="data-type-card">
+                    <h3>bool</h3>
+                    <code>true, false</code>
+                    <p>Boolean values</p>
+                </div>
+                <div class="data-type-card">
+                    <h3>list</h3>
+                    <code>["a", "b", "c"]</code>
+                    <p>Ordered sequence</p>
+                </div>
+                <div class="data-type-card">
+                    <h3>map</h3>
+                    <code>{key = "value"}</code>
+                    <p>Key-value pairs</p>
+                </div>
+                <div class="data-type-card">
+                    <h3>set</h3>
+                    <code>["a", "b"]</code>
+                    <p>Unique values</p>
+                </div>
+            </div>
+            
+            <h3>Complex Data Types Examples</h3>
+            <div class="code-block" data-lang="HCL">
+# List
+variable "availability_zones" {
+  type    = list(string)
+  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
+}
+
+# Map
+variable "instance_amis" {
+  type = map(string)
+  default = {
+    us-east-1 = "ami-1234abcd"
+    us-west-2 = "ami-5678efgh"
+  }
+}
+
+# Object
+variable "server_config" {
+  type = object({
+    name     = string
+    cpu      = number
+    is_linux = bool
+  })
+}</div>
+        </div>
+        
+        <!-- Console Demo Section -->
+        <div id="console" class="content-section">
+            <h2>💻 Terraform Console - Interactive Demo</h2>
+            
+            <div class="interactive-demo">
+                <h3>🧮 Try Terraform Expressions</h3>
+                <p>Enter a Terraform expression to see the result:</p>
+                <input type="text" class="demo-input" id="consoleInput" placeholder='Try: ["dev", "qa", "prod"][1]' onkeyup="evaluateExpression()">
+                <div class="demo-output" id="consoleOutput">Output will appear here...</div>
+            </div>
+            
+            <h3>Common Console Examples</h3>
+            <div class="code-block" data-lang="terraform console">
+# List Indexing
+["dev", "qa", "prod"][1]
+# Output: "qa"
+
+# Map Access
+{dev = "t2.micro", prod = "t3.medium"}["prod"]
+# Output: "t3.medium"
+
+# Functions
+upper("hello")
+# Output: "HELLO"
+
+# Lookup with default
+lookup({a="b"}, "c", "default")
+# Output: "default"
+
+# Join function
+join(",", ["dev", "qa", "prod"])
+# Output: "dev,qa,prod"</div>
+        </div>
+        
+        <!-- TFVars Section -->
+        <div id="tfvars" class="content-section">
+            <h2>⚙️ TFVars & Variable Overriding</h2>
+            
+            <div class="highlight">
+                <h3>🎯 Variable Precedence Order (Highest to Lowest)</h3>
+                <ol>
+                    <li><strong>CLI -var flag:</strong> <code>-var="region=us-west-1"</code></li>
+                    <li><strong>CLI -var-file:</strong> <code>-var-file="prod.tfvars"</code></li>
+                    <li><strong>Environment variables:</strong> <code>TF_VAR_region=us-east-2</code></li>
+                    <li><strong>*.auto.tfvars files:</strong> <code>dev.auto.tfvars</code></li>
+                    <li><strong>Default values:</strong> <code>default = "us-east-1"</code></li>
+                </ol>
+            </div>
+            
+            <h3>Example .tfvars File</h3>
+            <div class="code-block" data-lang="prod.tfvars">
+region        = "us-west-2"
+instance_type = "t3.medium"
+tags = {
+  Environment = "production"
+  Owner       = "DevOps Team"
+}</div>
+            
+            <h3>Usage Examples</h3>
+            <div class="code-block" data-lang="bash">
+# Manual usage
+terraform apply -var-file="prod.tfvars"
+
+# Multiple files
+terraform apply -var-file="prod.tfvars" -var-file="secrets.tfvars"
+
+# Auto-loading (no CLI needed)
+# Files named: terraform.tfvars or *.auto.tfvars</div>
+        </div>
+        
+        <!-- Hands-On Section -->
+        <div id="handson" class="content-section">
+            <h2>🛠️ Hands-On: Parametrized EC2 + VPC Demo</h2>
+            
+            <div class="hands-on-section">
+                <h3>📁 Project Structure</h3>
+                <div class="file-structure">
+terraform-variables-demo/
+├── main.tf              # All resource definitions
+├── variables.tf         # Input variable declarations  
+├── outputs.tf           # Output variables
+└── dev.tfvars          # Environment-specific values</div>
+            </div>
+            
+            <h3>variables.tf</h3>
+            <div class="code-block" data-lang="HCL">
+variable "region" {
+  type        = string
+  description = "AWS region where infrastructure will be deployed"
+}
+
+variable "vpc_cidr" {
+  type        = string
+  default     = "10.0.0.0/16"
+  description = "CIDR block for the VPC"
+}
+
+variable "public_subnet_cidrs" {
+  type        = list(string)
+  default     = ["10.0.1.0/24", "10.0.2.0/24"]
+  description = "CIDRs for public subnets"
+}
+
+variable "instances" {
+  type = list(object({
+    name = string
+  }))
+  default = [
+    { name = "web1" },
+    { name = "web2" }
+  ]
+}</div>
+            
+            <h3>main.tf - Key Resources</h3>
+            <div class="code-block" data-lang="HCL">
+# VPC
+resource "aws_vpc" "main" {
+  cidr_block = var.vpc_cidr
+  tags = merge(var.tags, {
+    Name = "main-vpc"
+  })
+}
+
+# Subnets with for_each loop
+resource "aws_subnet" "public" {
+  for_each = toset(var.public_subnet_cidrs)
+  
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = each.value
+  availability_zone       = "${var.region}a"
+  map_public_ip_on_launch = true
+}
+
+# EC2 instances with for_each
+resource "aws_instance" "web" {
+  for_each = {
+    for i, inst in var.instances :
+    inst.name => inst
+  }
+  
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  subnet_id     = values(aws_subnet.public)[0].id
+}</div>
+            
+            <h3>🚀 Execution Commands</h3>
+            <div class="code-block" data-lang="bash">
+terraform init
+terraform plan -var-file="dev.tfvars"
+terraform apply -var-file="dev.tfvars"
+terraform destroy -var-file="dev.tfvars"</div>
+        </div>
+        
+        <!-- Summary Section -->
+        <div id="summary" class="content-section">
+            <h2>✅ Session Summary</h2>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>🔧 HCL Basics</h3>
+                    <p>Blocks, arguments, expressions - building blocks of infra code</p>
+                </div>
+                <div class="summary-card">
+                    <h3>📝 Variables</h3>
+                    <p>Input/Output variables for reusable, modular code</p>
+                </div>
+                <div class="summary-card">
+                    <h3>🎯 Data Types</h3>
+                    <p>String, number, list, map, object, set, tuple</p>
+                </div>
+                <div class="summary-card">
+                    <h3>💻 Console</h3>
+                    <p>Interactive testing of expressions and functions</p>
+                </div>
+                <div class="summary-card">
+                    <h3>🔄 Loops</h3>
+                    <p>count and for_each for dynamic resource creation</p>
+                </div>
+                <div class="summary-card">
+                    <h3>⚙️ TFVars</h3>
+                    <p>Environment separation and variable overriding</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <h3>🎯 Key Takeaway</h3>
+                <p><strong>Infrastructure is no longer just about servers—it's about code, logic, and structure.</strong></p>
+                <p>What Python is to apps, Terraform is to cloud infrastructure. You now understand how to write infrastructure like software, using variables, loops, conditions, and modular design.</p>
+            </div>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h3>✅ You Can Now</h3>
+                    <ul style="text-align: left; margin-top: 10px;">
+                        <li>Avoid code repetition</li>
+                        <li>Adapt infrastructure per environment</li>
+                        <li>Structure code that scales with teams</li>
+                        <li>Write maintainable, reusable IaC</li>
+                    </ul>
+                </div>
+                <div class="concept-card">
+                    <h3>🚀 Next Steps</h3>
+                    <ul style="text-align: left; margin-top: 10px;">
+                        <li>Practice with more complex scenarios</li>
+                        <li>Explore Terraform modules</li>
+                        <li>Learn state management</li>
+                        <li>Implement CI/CD with Terraform</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected section and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function evaluateExpression() {
+            const input = document.getElementById('consoleInput').value;
+            const output = document.getElementById('consoleOutput');
+            
+            // Simple expression evaluator for demo purposes
+            const expressions = {
+                '["dev", "qa", "prod"][1]': '"qa"',
+                '["dev", "qa", "prod"][0]': '"dev"',
+                '["dev", "qa", "prod"][2]': '"prod"',
+                '{dev = "t2.micro", prod = "t3.medium"}["prod"]': '"t3.medium"',
+                '{dev = "t2.micro", prod = "t3.medium"}["dev"]': '"t2.micro"',
+                'upper("hello")': '"HELLO"',
+                'lower("WORLD")': '"world"',
+                'length(["a", "b", "c"])': '3',
+                'join(",", ["dev", "qa", "prod"])': '"dev,qa,prod"',
+                'lookup({a="b"}, "c", "default")': '"default"',
+                'lookup({a="b"}, "a", "default")': '"b"'
+            };
+            
+            if (expressions[input]) {
+                output.textContent = `> ${input}\n${expressions[input]}`;
+                output.style.color = '#68d391';
+            } else if (input.trim() === '') {
+                output.textContent = 'Output will appear here...';
+                output.style.color = '#a0aec0';
+            } else {
+                output.textContent = `> ${input}\nTry one of the example expressions above!`;
+                output.style.color = '#fbb6ce';
+            }
+        }
+        
+        // Initialize with first tab active
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('recap');
+        });
+    </script>
+</body>
+</html>

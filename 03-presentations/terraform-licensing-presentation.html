@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform Licensing & Pricing</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; }
+        .presentation { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        .slide { background: white; border-radius: 15px; padding: 40px; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.2); min-height: 80vh; display: flex; flex-direction: column; justify-content: center; }
+        
+        .slide-title { font-size: 3em; color: #623ce4; text-align: center; margin-bottom: 30px; font-weight: bold; }
+        .slide-subtitle { font-size: 1.5em; color: #666; text-align: center; margin-bottom: 40px; }
+        
+        .timeline { display: flex; align-items: center; justify-content: center; margin: 30px 0; }
+        .timeline-item { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 0 10px; text-align: center; position: relative; }
+        .timeline-item:after { content: '→'; position: absolute; right: -25px; font-size: 2em; color: #623ce4; }
+        .timeline-item:last-child:after { display: none; }
+        .timeline-date { font-weight: bold; color: #623ce4; font-size: 1.2em; }
+        
+        .license-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0; }
+        .license-card { background: #f8f9fa; border-radius: 10px; padding: 25px; border-left: 5px solid; }
+        .old-license { border-left-color: #27ae60; }
+        .new-license { border-left-color: #e74c3c; }
+        
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 30px 0; }
+        .pricing-card { background: #f8f9fa; border-radius: 15px; padding: 30px; text-align: center; border: 3px solid transparent; transition: all 0.3s; }
+        .pricing-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .free-tier { border-color: #27ae60; }
+        .paid-tier { border-color: #3498db; }
+        .enterprise-tier { border-color: #8e44ad; }
+        
+        .pricing-title { font-size: 1.8em; font-weight: bold; margin-bottom: 15px; }
+        .pricing-price { font-size: 2.5em; font-weight: bold; color: #623ce4; margin: 15px 0; }
+        .pricing-features { text-align: left; margin: 20px 0; }
+        .pricing-features li { margin: 8px 0; padding-left: 20px; position: relative; }
+        .pricing-features li:before { content: '✓'; position: absolute; left: 0; color: #27ae60; font-weight: bold; }
+        
+        .key-points { background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 10px; padding: 25px; margin: 20px 0; }
+        .key-points h3 { color: #856404; margin-bottom: 15px; }
+        .key-points ul { margin-left: 20px; }
+        .key-points li { margin: 10px 0; }
+        
+        .opentofu-section { background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; border-radius: 15px; padding: 30px; margin: 30px 0; text-align: center; }
+        .opentofu-section h2 { margin-bottom: 20px; }
+        
+        .restrictions { background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 10px; padding: 25px; margin: 20px 0; }
+        .restrictions h3 { color: #721c24; margin-bottom: 15px; }
+        
+        .conclusion { background: #d1ecf1; border: 1px solid #bee5eb; border-radius: 10px; padding: 25px; margin: 20px 0; text-align: center; }
+        .conclusion h3 { color: #0c5460; margin-bottom: 15px; }
+        
+        .slide-number { position: absolute; bottom: 20px; right: 20px; background: #623ce4; color: white; padding: 10px 15px; border-radius: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <div class="slide-number">1</div>
+            <h1 class="slide-title">🏗️ Terraform Licensing & Pricing</h1>
+            <p class="slide-subtitle">Understanding the New Business Source License (BSL 1.1)</p>
+            <div style="text-align: center; margin-top: 40px;">
+                <div style="font-size: 1.2em; color: #666;">
+                    <strong>Key Change:</strong> August 10, 2023<br>
+                    From Open Source (MPL 2.0) → Source-Available (BSL 1.1)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: License Evolution -->
+        <div class="slide">
+            <div class="slide-number">2</div>
+            <h2 class="slide-title">📅 License Evolution Timeline</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Before Aug 2023</div>
+                    <div>Mozilla Public License v2.0</div>
+                    <div style="color: #27ae60; font-weight: bold;">Fully Open Source</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Aug 10, 2023</div>
+                    <div>Business Source License v1.1</div>
+                    <div style="color: #e74c3c; font-weight: bold;">Source-Available</div>
+                </div>
+            </div>
+
+            <div class="license-comparison">
+                <div class="license-card old-license">
+                    <h3 style="color: #27ae60;">✅ MPL 2.0 (Old)</h3>
+                    <ul>
+                        <li>Fully open source</li>
+                        <li>No commercial restrictions</li>
+                        <li>Could create competing products</li>
+                        <li>Complete freedom of use</li>
+                    </ul>
+                </div>
+                <div class="license-card new-license">
+                    <h3 style="color: #e74c3c;">⚠️ BSL 1.1 (Current)</h3>
+                    <ul>
+                        <li>Source-available (not open source)</li>
+                        <li>Commercial restrictions apply</li>
+                        <li>Cannot compete with HashiCorp</li>
+                        <li>Free for internal use only</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Key Licensing Points -->
+        <div class="slide">
+            <div class="slide-number">3</div>
+            <h2 class="slide-title">🔑 Key Licensing Points</h2>
+            
+            <div class="key-points">
+                <h3>✅ What You CAN Do (Free)</h3>
+                <ul>
+                    <li><strong>Internal Use:</strong> Manage your own infrastructure</li>
+                    <li><strong>Personal Projects:</strong> Individual learning and development</li>
+                    <li><strong>Company Projects:</strong> Internal infrastructure management</li>
+                    <li><strong>View & Modify:</strong> Source code remains accessible</li>
+                </ul>
+            </div>
+
+            <div class="restrictions">
+                <h3>❌ What You CANNOT Do</h3>
+                <ul>
+                    <li><strong>Commercial Competition:</strong> Create managed Terraform platforms</li>
+                    <li><strong>SaaS Offerings:</strong> Sell Terraform-as-a-Service</li>
+                    <li><strong>Direct Competition:</strong> Compete with HashiCorp's products</li>
+                    <li><strong>Redistribution:</strong> Package and sell Terraform commercially</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Terraform Editions & Pricing -->
+        <div class="slide">
+            <div class="slide-number">4</div>
+            <h2 class="slide-title">💰 Terraform Editions & Pricing</h2>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card free-tier">
+                    <div class="pricing-title" style="color: #27ae60;">Community Edition</div>
+                    <div class="pricing-price" style="color: #27ae60;">FREE</div>
+                    <ul class="pricing-features">
+                        <li>Command-line interface (CLI)</li>
+                        <li>Core Terraform functionality</li>
+                        <li>Write, plan, and apply changes</li>
+                        <li>Local state management</li>
+                        <li>Provider ecosystem access</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card paid-tier">
+                    <div class="pricing-title" style="color: #3498db;">Terraform Cloud</div>
+                    <div class="pricing-price" style="color: #3498db;">$20+/user</div>
+                    <ul class="pricing-features">
+                        <li>Remote state management</li>
+                        <li>Team collaboration</li>
+                        <li>Policy as code</li>
+                        <li>Cost estimation</li>
+                        <li>VCS integration</li>
+                        <li>Concurrent runs</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card enterprise-tier">
+                    <div class="pricing-title" style="color: #8e44ad;">Terraform Enterprise</div>
+                    <div class="pricing-price" style="color: #8e44ad;">Custom</div>
+                    <ul class="pricing-features">
+                        <li>Self-hosted deployment</li>
+                        <li>Advanced security features</li>
+                        <li>Compliance controls</li>
+                        <li>Audit logging</li>
+                        <li>SSO integration</li>
+                        <li>Priority support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: OpenTofu Alternative -->
+        <div class="slide">
+            <div class="slide-number">5</div>
+            <h2 class="slide-title">🌟 OpenTofu: The Open Source Alternative</h2>
+            
+            <div class="opentofu-section">
+                <h2>🚀 OpenTofu</h2>
+                <p style="font-size: 1.3em; margin-bottom: 20px;">Community Response to Terraform's License Change</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: left;">
+                    <div>
+                        <h3>✅ Benefits</h3>
+                        <ul style="margin-left: 20px;">
+                            <li>Truly open source (MPL 2.0)</li>
+                            <li>Linux Foundation managed</li>
+                            <li>Terraform-compatible</li>
+                            <li>No commercial restrictions</li>
+                            <li>Community-driven development</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>🎯 Use Cases</h3>
+                        <ul style="margin-left: 20px;">
+                            <li>Commercial Terraform alternatives</li>
+                            <li>SaaS platform development</li>
+                            <li>Enterprise with licensing concerns</li>
+                            <li>Open source compliance requirements</li>
+                            <li>Long-term vendor independence</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Decision Matrix -->
+        <div class="slide">
+            <div class="slide-number">6</div>
+            <h2 class="slide-title">🤔 Which Should You Choose?</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+                <div style="background: #e8f5e8; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #27ae60; margin-bottom: 20px;">Choose Terraform If:</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>Using for internal infrastructure only</li>
+                        <li>Need HashiCorp support</li>
+                        <li>Want Terraform Cloud features</li>
+                        <li>Comfortable with BSL restrictions</li>
+                        <li>Enterprise compliance needs</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #e3f2fd; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #2196f3; margin-bottom: 20px;">Choose OpenTofu If:</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>Building commercial products</li>
+                        <li>Need true open source license</li>
+                        <li>Want vendor independence</li>
+                        <li>Contributing to open source</li>
+                        <li>Long-term flexibility required</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Conclusion -->
+        <div class="slide">
+            <div class="slide-number">7</div>
+            <h2 class="slide-title">📋 Key Takeaways</h2>
+            
+            <div class="conclusion">
+                <h3>💡 Summary</h3>
+                <p style="font-size: 1.2em; margin: 20px 0;">
+                    Terraform remains <strong>free for internal use</strong> but is no longer fully open source. 
+                    The BSL 1.1 license prevents commercial competition with HashiCorp.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
+                <div style="background: #fff3cd; padding: 20px; border-radius: 10px; text-align: center;">
+                    <h4 style="color: #856404;">⚖️ License Impact</h4>
+                    <p>BSL 1.1 = Source-Available, not Open Source</p>
+                </div>
+                <div style="background: #d4edda; padding: 20px; border-radius: 10px; text-align: center;">
+                    <h4 style="color: #155724;">💰 Cost</h4>
+                    <p>Free for internal use, paid for advanced features</p>
+                </div>
+                <div style="background: #cce5ff; padding: 20px; border-radius: 10px; text-align: center;">
+                    <h4 style="color: #004085;">🔄 Alternative</h4>
+                    <p>OpenTofu provides true open source option</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; font-size: 1.1em; color: #666;">
+                <strong>Choose based on your specific use case and licensing requirements</strong>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

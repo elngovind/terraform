@@ -1,90 +1,202 @@
-# Terraform Learning Repository
-## Complete Infrastructure as Code Training Materials
+# Terraform Complete Learning Path
+## From Zero to Production-Ready Infrastructure
 
-This repository contains comprehensive Terraform learning materials including installation guides, tutorials, presentations, and hands-on examples.
-
-## 📚 Contents
-
-### 📖 Documentation
-- **[Complete Installation & First Infrastructure Guide](terraform-complete-guide.md)** - Step-by-step guide from installation to AWS EC2 deployment
-- **[Installation Guide](terraform-installation-guide.md)** - Detailed installation instructions for all operating systems
-- **[Day 01 Lecture Notes](terraform-day01-lecture.md)** - 150-minute structured lecture content
-
-### 🎯 Interactive Materials
-- **[HTML Presentation](terraform-presentation.html)** - Professional slide deck for lectures
-- **[Unique Demo Ideas](terraform-unique-demos.md)** - Creative and engaging demonstration concepts
-- **[Axcess.io Landing Page](index.html)** - Modern marketing page showcasing GenAI capabilities
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Terraform 1.2.0+
-- AWS CLI
-- AWS Account with programmatic access
-- Text editor (VS Code recommended)
-
-### Installation
-```bash
-# Clone this repository
-git clone https://github.com/elngovind/terraform.git
-cd terraform
-
-# Follow the complete guide
-open terraform-complete-guide.md
-```
-
-## 📋 Learning Path
-
-### Day 01: Fundamentals (150 minutes)
-1. **Manual Deployment Challenges** (15 min)
-2. **Evolution of Infrastructure Management** (20 min)
-3. **Types of IaC Tools** (25 min)
-4. **Why Terraform?** (20 min)
-5. **Terraform Core Concepts** (25 min)
-6. **HCL Basics & First Resource** (20 min)
-
-### Hands-On Labs
-- Install Terraform on your system
-- Configure AWS credentials
-- Deploy your first EC2 instance
-- Understand Terraform state
-- Clean up resources
-
-## 🎓 Course Materials
-
-### For Instructors
-- **Presentation slides** with timing indicators
-- **Interactive demo scripts** with unique ideas
-- **Troubleshooting guides** for common issues
-- **Assessment materials** and homework assignments
-
-### For Students
-- **Step-by-step tutorials** with copy-paste commands
-- **Expected outputs** for verification
-- **Best practices** and security guidelines
-- **Next steps** and advanced learning paths
-
-## 🛠️ Tools & Technologies
-
-- **Terraform** - Infrastructure as Code
-- **AWS** - Cloud Provider
-- **HCL** - HashiCorp Configuration Language
-- **Git** - Version Control
-- **VS Code** - Recommended Editor
-
-## 📞 Support
-
-For questions or issues:
-- Create an issue in this repository
-- Contact: [Govind @ Axcess.io](mailto:info@axcess.io)
-- Visit: [Axcess.io](https://axcess.io)
-
-## 🏢 About Axcess.io
-
-Axcess.io is a distinguished AWS Differentiated Partner specializing in cloud-native solutions and Infrastructure as Code. We help customers achieve business agility through expert cloud services and innovative GenAI solutions.
+Welcome to the comprehensive Terraform learning repository! This guide takes you from complete beginner to building production-ready infrastructure.
 
 ---
 
-**Last Updated:** December 2024  
-**Terraform Version:** 1.6.x  
-**AWS Provider:** 5.92.x
+## Learning Path Overview
+
+### Prerequisites
+- AWS Account with programmatic access
+- Basic understanding of cloud concepts
+- Text editor (VS Code recommended)
+
+---
+
+## 📖 Step-by-Step Learning Journey
+
+### Phase 1: Fundamentals (Day 1)
+**Duration:** 2.5 hours | **Level:** Beginner
+
+1. **[Installation Guide](01-fundamentals/terraform-installation-guide.md)**
+   - Install Terraform on your system
+   - Configure AWS CLI
+   - Verify setup
+
+2. **[Day 1 Lecture Notes](01-fundamentals/terraform-day01-lecture.md)**
+   - Manual deployment challenges
+   - Infrastructure as Code evolution
+   - Why Terraform?
+   - Core concepts & HCL basics
+
+3. **[Day 1 Practice MCQs](01-fundamentals/terraform-basic-mcqs-day01.md)**
+   - Test your understanding
+   - 7 fundamental questions
+
+4. **[First Infrastructure Guide](01-fundamentals/terraform-complete-guide.md)**
+   - Deploy your first EC2 instance
+   - Understand Terraform workflow
+   - State management basics
+
+---
+
+### Phase 2: Intermediate Concepts (Day 2)
+**Duration:** 3 hours | **Level:** Intermediate
+
+1. **[Modular Architecture Guide](02-intermediate/terraform-day2-complete-modular-guide.md)**
+   - Variables, outputs, locals
+   - Module creation and usage
+   - Environment-specific configurations
+
+2. **[Intermediate MCQs](02-intermediate/terraform-mcqs.md)**
+   - Application-oriented questions
+   - 6 intermediate-level challenges
+
+3. **[Production Project](02-intermediate/ecommerce-infrastructure/)**
+   - Complete e-commerce platform
+   - Multi-tier architecture
+   - Auto-scaling and load balancing
+
+---
+
+### Phase 3: Advanced & Presentations
+**Duration:** 2 hours | **Level:** Advanced
+
+1. **[Interactive Presentations](03-presentations/)**
+   - Professional slide decks
+   - Licensing and enterprise features
+   - Tool comparisons
+
+2. **[Unique Demo Ideas](03-presentations/terraform-unique-demos.md)**
+   - Creative demonstration concepts
+   - Engaging learning activities
+
+---
+
+## Repository Structure
+
+```
+terraform-learning/
+├── 01-fundamentals/          # Day 1 - Basics
+│   ├── terraform-installation-guide.md
+│   ├── terraform-day01-lecture.md
+│   ├── terraform-basic-mcqs-day01.md
+│   └── terraform-complete-guide.md
+│
+├── 02-intermediate/          # Day 2 - Modular Architecture
+│   ├── terraform-day2-complete-modular-guide.md
+│   ├── terraform-mcqs.md
+│   └── ecommerce-infrastructure/    # Complete project
+│       ├── modules/
+│       ├── environments/
+│       └── *.tf files
+│
+├── 03-presentations/         # Teaching Materials
+│   ├── terraform-licensing-presentation.html
+│   ├── terraform-advanced-concepts.html
+│   ├── iac-tools-comparison.html
+│   └── terraform-unique-demos.md
+│
+└── 04-resources/            # Additional Resources
+    ├── ec2-cft.yaml           # CloudFormation comparison
+    └── terraform-vpc-ec2-asg-complete-guide.md
+```
+
+---
+
+## Quick Start Guide
+
+### Step 1: Environment Setup (15 minutes)
+```bash
+# Clone repository
+git clone <your-repo-url>
+cd terraform-learning
+
+# Follow installation guide
+open 01-fundamentals/terraform-installation-guide.md
+```
+
+### Step 2: Day 1 Learning (2.5 hours)
+```bash
+# Read lecture notes
+open 01-fundamentals/terraform-day01-lecture.md
+
+# Follow hands-on guide
+open 01-fundamentals/terraform-complete-guide.md
+
+# Test knowledge
+open 01-fundamentals/terraform-basic-mcqs-day01.md
+```
+
+### Step 3: Day 2 Advanced (3 hours)
+```bash
+# Learn modular architecture
+open 02-intermediate/terraform-day2-complete-modular-guide.md
+
+# Build production project
+cd 02-intermediate/ecommerce-infrastructure
+terraform init
+terraform plan
+```
+
+---
+
+## Progress Tracking
+
+### Day 1 Checklist
+- [ ] Terraform installed and configured
+- [ ] AWS CLI configured
+- [ ] First EC2 instance deployed
+- [ ] Terraform state understood
+- [ ] Day 1 MCQs completed (5/7 minimum)
+
+### Day 2 Checklist
+- [ ] Variables and outputs mastered
+- [ ] First module created
+- [ ] Multi-environment setup
+- [ ] E-commerce project deployed
+- [ ] Intermediate MCQs completed (4/6 minimum)
+
+---
+
+## For Instructors
+
+### Teaching Materials
+- **[Presentation Slides](03-presentations/)** - Ready-to-use slide decks
+- **[Demo Scripts](03-presentations/terraform-unique-demos.md)** - Engaging demonstrations
+- **[Assessment Tools](01-fundamentals/terraform-basic-mcqs-day01.md)** - MCQs for evaluation
+
+### Course Timeline
+- **Day 1:** 150 minutes structured lecture + 30 minutes hands-on
+- **Day 2:** 120 minutes modular concepts + 60 minutes project work
+
+---
+
+## Support & Troubleshooting
+
+### Common Issues
+- **Installation problems:** Check [installation guide](01-fundamentals/terraform-installation-guide.md)
+- **AWS permissions:** Ensure proper IAM policies
+- **State conflicts:** Use remote state for team work
+
+### Get Help
+- Create issues in this repository
+- Check documentation for troubleshooting
+- Review community resources
+
+---
+
+## Additional Resources
+
+**Continue Learning:**
+- HashiCorp Terraform Documentation
+- AWS Provider Documentation
+- Terraform Registry for modules
+- Community best practices
+
+---
+
+**Happy Learning!**
+
+*Last Updated: December 2024*

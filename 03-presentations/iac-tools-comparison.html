@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IaC & DevOps Tools Comparison</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: #f5f7fa; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; font-size: 2.5em; }
+        h2 { color: #34495e; margin: 30px 0 20px; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin: 30px 0; }
+        .tool-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid; transition: transform 0.3s; }
+        .tool-card:hover { transform: translateY(-5px); }
+        
+        .terraform { border-left-color: #623ce4; }
+        .ansible { border-left-color: #ee0000; }
+        .chef { border-left-color: #f09820; }
+        .puppet { border-left-color: #ffae1a; }
+        .saltstack { border-left-color: #00c4cc; }
+        .packer { border-left-color: #1daeff; }
+        .vagrant { border-left-color: #1563ff; }
+        .pulumi { border-left-color: #8a3391; }
+        
+        .tool-header { display: flex; align-items: center; margin-bottom: 15px; }
+        .tool-icon { width: 40px; height: 40px; margin-right: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .tool-name { font-size: 1.4em; font-weight: bold; }
+        .tool-type { background: #ecf0f1; padding: 4px 8px; border-radius: 15px; font-size: 0.8em; margin-left: auto; }
+        
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .comparison-table th, .comparison-table td { padding: 12px; text-align: left; border-bottom: 1px solid #ecf0f1; }
+        .comparison-table th { background: #34495e; color: white; font-weight: bold; }
+        .comparison-table tr:hover { background: #f8f9fa; }
+        
+        .diagram { background: white; border-radius: 10px; padding: 30px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        .workflow { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 20px; margin: 20px 0; }
+        .workflow-step { background: #3498db; color: white; padding: 15px 20px; border-radius: 25px; font-weight: bold; position: relative; }
+        .workflow-step:after { content: '→'; position: absolute; right: -15px; color: #3498db; font-size: 1.5em; }
+        .workflow-step:last-child:after { display: none; }
+        
+        .category-section { background: white; border-radius: 10px; padding: 25px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .category-title { color: #2c3e50; font-size: 1.3em; margin-bottom: 15px; }
+        .tools-list { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tool-tag { background: #ecf0f1; padding: 8px 15px; border-radius: 20px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ Infrastructure as Code & DevOps Tools Comparison</h1>
+        
+        <div class="diagram">
+            <h2>📊 Tool Categories Overview</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div class="category-section">
+                    <div class="category-title">🏗️ Infrastructure Provisioning</div>
+                    <div class="tools-list">
+                        <span class="tool-tag">Terraform</span>
+                        <span class="tool-tag">Pulumi</span>
+                    </div>
+                </div>
+                <div class="category-section">
+                    <div class="category-title">⚙️ Configuration Management</div>
+                    <div class="tools-list">
+                        <span class="tool-tag">Ansible</span>
+                        <span class="tool-tag">Chef</span>
+                        <span class="tool-tag">Puppet</span>
+                        <span class="tool-tag">SaltStack</span>
+                    </div>
+                </div>
+                <div class="category-section">
+                    <div class="category-title">📦 Image Building</div>
+                    <div class="tools-list">
+                        <span class="tool-tag">Packer</span>
+                    </div>
+                </div>
+                <div class="category-section">
+                    <div class="category-title">💻 Development Environment</div>
+                    <div class="tools-list">
+                        <span class="tool-tag">Vagrant</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tool-grid">
+            <div class="tool-card terraform">
+                <div class="tool-header">
+                    <div class="tool-icon" style="background: #623ce4;">TF</div>
+                    <div class="tool-name">Terraform</div>
+                    <div class="tool-type">Infrastructure Provisioning</div>
+                </div>
+                <p><strong>Purpose:</strong> Infrastructure as Code for provisioning cloud resources</p>
+                <p><strong>Language:</strong> HCL (HashiCorp Configuration Language)</p>
+                <p><strong>Approach:</strong> Declarative</p>
+                <p><strong>Best For:</strong> Multi-cloud infrastructure provisioning, state management</p>
+                <p><strong>Key Feature:</strong> Provider ecosystem, state management, plan/apply workflow</p>
+            </div>
+
+            <div class="tool-card ansible">
+                <div class="tool-header">
+                    <div class="tool-icon" style="background: #ee0000;">AN</div>
+                    <div class="tool-name">Ansible</div>
+                    <div class="tool-type">Configuration Management</div>
+                </div>
+                <p><strong>Purpose:</strong> Configuration management and application deployment</p>
+                <p><strong>Language:</strong> YAML</p>
+                <p><strong>Approach:</strong> Declarative, agentless</p>
+                <p><strong>Best For:</strong> Server configuration, application deployment, orchestration</p>
+                <p><strong>Key Feature:</strong> No agents required, SSH-based, simple syntax</p>
+            </div>
+
+            <div class="tool-card chef">
+                <div class="tool-header">
+                    <div class="tool-icon" style="background: #f09820;">CH</div>
+                    <div class="tool-name">Chef</div>
+                    <div class="tool-type">Configuration Management</div>
+                </div>
+                <p><strong>Purpose:</strong> Configuration management and compliance automation</p>
+                <p><strong>Language:</strong> Ruby DSL</p>
+                <p><strong>Approach:</strong> Imperative, agent-based</p>
+                <p><strong>Best For:</strong> Complex configurations, compliance management</p>
+                <p><strong>Key Feature:</strong> Cookbooks, recipes, powerful Ruby-based DSL</p>
+            </div>
+
+            <div class="tool-card puppet">
+                <div class="tool-header">
+                    <div class="tool-icon" style="background: #ffae1a;">PU</div>
+                    <div class="tool-name">Puppet</div>
+                    <div class="tool-type">Configuration Management</div>
+                </div>
+                <p><strong>Purpose:</strong> Configuration management and infrastructure automation</p>
+                <p><strong>Language:</strong> Puppet DSL</p>
+                <p><strong>Approach:</strong> Declarative, agent-based</p>
+                <p><strong>Best For:</strong> Large-scale infrastructure, compliance, reporting</p>
+                <p><strong>Key Feature:</strong> Manifests, modules, strong reporting capabilities</p>
+            </div>
+
+            <div class="tool-card saltstack">
+                <div class="tool-header">
+                    <div class="tool-icon" style="background: #00c4cc;">SA</div>
+                    <div class="tool-name">SaltStack</div>
+                    <div class="tool-type">Configuration Management</div>
+                </div>
+                <p><strong>Purpose:</strong> Configuration management and remote execution</p>
+                <p><strong>Language:</strong> YAML + Python</p>
+                <p><strong>Approach:</strong> Declarative, agent-based</p>
+                <p><strong>Best For:</strong> High-speed execution, event-driven automation</p>
+                <p><strong>Key Feature:</strong> Fast execution, event reactor, remote execution</p>
+            </div>
+
+            <div class="tool-card packer">
+                <div class="tool-header">
+                    <div class="tool-icon" style="background: #1daeff;">PA</div>
+                    <div class="tool-name">Packer</div>
+                    <div class="tool-type">Image Building</div>
+                </div>
+                <p><strong>Purpose:</strong> Machine image creation and automation</p>
+                <p><strong>Language:</strong> JSON/HCL</p>
+                <p><strong>Approach:</strong> Declarative</p>
+                <p><strong>Best For:</strong> Creating identical machine images across platforms</p>
+                <p><strong>Key Feature:</strong> Multi-platform image building, immutable infrastructure</p>
+            </div>
+
+            <div class="tool-card vagrant">
+                <div class="tool-header">
+                    <div class="tool-icon" style="background: #1563ff;">VA</div>
+                    <div class="tool-name">Vagrant</div>
+                    <div class="tool-type">Development Environment</div>
+                </div>
+                <p><strong>Purpose:</strong> Development environment management</p>
+                <p><strong>Language:</strong> Ruby DSL</p>
+                <p><strong>Approach:</strong> Declarative</p>
+                <p><strong>Best For:</strong> Local development environments, testing</p>
+                <p><strong>Key Feature:</strong> Provider abstraction, reproducible environments</p>
+            </div>
+
+            <div class="tool-card pulumi">
+                <div class="tool-header">
+                    <div class="tool-icon" style="background: #8a3391;">PL</div>
+                    <div class="tool-name">Pulumi</div>
+                    <div class="tool-type">Infrastructure Provisioning</div>
+                </div>
+                <p><strong>Purpose:</strong> Infrastructure as Code using general-purpose languages</p>
+                <p><strong>Language:</strong> TypeScript, Python, Go, C#, Java</p>
+                <p><strong>Approach:</strong> Declarative</p>
+                <p><strong>Best For:</strong> Developers preferring familiar programming languages</p>
+                <p><strong>Key Feature:</strong> Real programming languages, strong typing, IDE support</p>
+            </div>
+        </div>
+
+        <div class="diagram">
+            <h2>🔄 Typical DevOps Workflow</h2>
+            <div class="workflow">
+                <div class="workflow-step">Code</div>
+                <div class="workflow-step">Build (Packer)</div>
+                <div class="workflow-step">Provision (Terraform)</div>
+                <div class="workflow-step">Configure (Ansible)</div>
+                <div class="workflow-step">Deploy</div>
+                <div class="workflow-step">Monitor</div>
+            </div>
+        </div>
+
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Tool</th>
+                    <th>Primary Use</th>
+                    <th>Language</th>
+                    <th>Agent</th>
+                    <th>Learning Curve</th>
+                    <th>Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Terraform</strong></td>
+                    <td>Infrastructure Provisioning</td>
+                    <td>HCL</td>
+                    <td>No</td>
+                    <td>Medium</td>
+                    <td>Multi-cloud infrastructure</td>
+                </tr>
+                <tr>
+                    <td><strong>Ansible</strong></td>
+                    <td>Configuration Management</td>
+                    <td>YAML</td>
+                    <td>No</td>
+                    <td>Low</td>
+                    <td>Simple automation tasks</td>
+                </tr>
+                <tr>
+                    <td><strong>Chef</strong></td>
+                    <td>Configuration Management</td>
+                    <td>Ruby DSL</td>
+                    <td>Yes</td>
+                    <td>High</td>
+                    <td>Complex enterprise environments</td>
+                </tr>
+                <tr>
+                    <td><strong>Puppet</strong></td>
+                    <td>Configuration Management</td>
+                    <td>Puppet DSL</td>
+                    <td>Yes</td>
+                    <td>High</td>
+                    <td>Large-scale compliance</td>
+                </tr>
+                <tr>
+                    <td><strong>SaltStack</strong></td>
+                    <td>Configuration Management</td>
+                    <td>YAML + Python</td>
+                    <td>Yes</td>
+                    <td>Medium</td>
+                    <td>High-speed execution</td>
+                </tr>
+                <tr>
+                    <td><strong>Packer</strong></td>
+                    <td>Image Building</td>
+                    <td>JSON/HCL</td>
+                    <td>No</td>
+                    <td>Low</td>
+                    <td>Immutable infrastructure</td>
+                </tr>
+                <tr>
+                    <td><strong>Vagrant</strong></td>
+                    <td>Development Environment</td>
+                    <td>Ruby DSL</td>
+                    <td>No</td>
+                    <td>Low</td>
+                    <td>Local development</td>
+                </tr>
+                <tr>
+                    <td><strong>Pulumi</strong></td>
+                    <td>Infrastructure Provisioning</td>
+                    <td>Multiple</td>
+                    <td>No</td>
+                    <td>Medium</td>
+                    <td>Developer-friendly IaC</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="diagram">
+            <h2>🎯 When to Use Which Tool</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #27ae60; margin-bottom: 10px;">🏗️ Infrastructure Provisioning</h3>
+                    <p><strong>Terraform:</strong> When you need multi-cloud infrastructure with state management</p>
+                    <p><strong>Pulumi:</strong> When developers prefer familiar programming languages</p>
+                </div>
+                <div style="background: #fff3e0; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #f39c12; margin-bottom: 10px;">⚙️ Configuration Management</h3>
+                    <p><strong>Ansible:</strong> Simple, agentless automation</p>
+                    <p><strong>Chef/Puppet:</strong> Complex enterprise environments</p>
+                    <p><strong>SaltStack:</strong> High-speed, event-driven automation</p>
+                </div>
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 10px;">
+                    <h3 style="color: #2196f3; margin-bottom: 10px;">📦 Specialized Tools</h3>
+                    <p><strong>Packer:</strong> Building consistent machine images</p>
+                    <p><strong>Vagrant:</strong> Local development environment management</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 10px; padding: 25px; margin: 20px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+            <h2>💡 Key Takeaway</h2>
+            <p style="font-size: 1.1em; color: #555;">These tools often work together in a complete DevOps pipeline. Terraform provisions infrastructure, Packer builds images, Ansible configures systems, and Vagrant manages development environments. Choose based on your specific needs and team expertise.</p>
+        </div>
+    </div>
+</body>
+</html>
