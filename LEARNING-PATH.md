@@ -7,10 +7,10 @@
 
 ```
 Day 1 (2.5 hours)          Day 2 (3 hours)           Advanced (2+ hours)
-├─ Fundamentals            ├─ Modular Architecture   ├─ Enterprise Features
-├─ Installation            ├─ Variables & Outputs    ├─ Advanced Patterns  
-├─ First Deployment        ├─ Production Project     ├─ Best Practices
-└─ Basic Assessment        └─ Intermediate MCQs      └─ Certification Prep
+##�#### Fundamentals            ##�#### Modular Architecture   ##�#### Enterprise Features
+##�#### Installation            ##�#### Variables & Outputs    ##�#### Advanced Patterns  
+##�#### First Deployment        ##�#### Production Project     ##�#### Best Practices
+###### Basic Assessment        ###### Intermediate MCQs      ###### Certification Prep
 ```
 
 ---
@@ -74,7 +74,7 @@ open README.md
 
 ---
 
-## 🎯 Learning Outcomes
+## Learning Outcomes
 
 By completing this path, you will:
 
@@ -121,4 +121,4 @@ This course prepares you for:
 
 **Ready to transform your infrastructure skills? Start your journey now!**
 
-[Begin with Day 1 Fundamentals →](01-fundamentals/README.md)
+[Begin with Day 1 Fundamentals ##�##](01-fundamentals/README.md)

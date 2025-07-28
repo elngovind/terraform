@@ -144,12 +144,12 @@ resource "aws_instance" "web" {
 ---
 
 ## Key Learning Areas Covered:
-✅ Infrastructure planning and modular design  
-✅ Variable validation and type constraints  
-✅ Module dependencies and data flow  
-✅ State management and remote backends  
-✅ Resource lifecycle management  
-✅ Local values and environment-specific configurations  
+Infrastructure planning and modular design  
+Variable validation and type constraints  
+Module dependencies and data flow  
+State management and remote backends  
+Resource lifecycle management  
+Local values and environment-specific configurations  
 
 ---
 

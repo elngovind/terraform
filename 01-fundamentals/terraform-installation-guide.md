@@ -3,7 +3,7 @@
 
 ---
 
-## 📋 **Overview**
+## ####� **Overview**
 
 Terraform is HashiCorp's Infrastructure as Code (IaC) tool that allows you to safely and consistently manage your infrastructure across multiple cloud providers. This guide provides comprehensive installation instructions for all supported operating systems.
 
@@ -15,7 +15,7 @@ Terraform is HashiCorp's Infrastructure as Code (IaC) tool that allows you to sa
 
 ---
 
-## 🚀 **Quick Start**
+## #### **Quick Start**
 
 ### **Recommended Installation Methods**
 - **macOS:** Homebrew
@@ -25,17 +25,17 @@ Terraform is HashiCorp's Infrastructure as Code (IaC) tool that allows you to sa
 
 ---
 
-## 💻 **Installation Methods**
+## ####� **Installation Methods**
 
 ## **Method 1: Package Managers (Recommended)**
 
 ### **macOS - Homebrew**
 
-#### Prerequisites
+## Prerequisites
 - Homebrew installed on your system
 - macOS 10.12 or later
 
-#### Installation Steps
+## Installation Steps
 ```bash
 # Update Homebrew
 brew update
@@ -47,7 +47,7 @@ brew install terraform
 terraform version
 ```
 
-#### Alternative: Install specific version
+## Alternative: Install specific version
 ```bash
 # Install specific version
 brew install terraform@1.6
@@ -60,12 +60,12 @@ brew link terraform@1.6
 
 ### **Windows - Chocolatey**
 
-#### Prerequisites
+## Prerequisites
 - Chocolatey package manager installed
 - Windows 10 or later
 - PowerShell 5.0 or later
 
-#### Installation Steps
+## Installation Steps
 ```powershell
 # Open PowerShell as Administrator
 # Install Terraform
@@ -75,7 +75,7 @@ choco install terraform
 terraform version
 ```
 
-#### Alternative: Scoop Package Manager
+## Alternative: Scoop Package Manager
 ```powershell
 # Install using Scoop
 scoop bucket add main
@@ -88,18 +88,18 @@ scoop install terraform
 
 ## **Ubuntu/Debian**
 
-#### Prerequisites
+## Prerequisites
 - Ubuntu 16.04+ or Debian 9+
 - sudo privileges
 - Internet connection
 
-#### Step 1: Update System and Install Dependencies
+## Step 1: Update System and Install Dependencies
 ```bash
 # Update package index and install required packages
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
 ```
 
-#### Step 2: Add HashiCorp GPG Key
+## Step 2: Add HashiCorp GPG Key
 ```bash
 # Download and install HashiCorp's GPG key
 wget -O- https://apt.releases.hashicorp.com/gpg | \
@@ -107,7 +107,7 @@ gpg --dearmor | \
 sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
 ```
 
-#### Step 3: Verify GPG Key Fingerprint
+## Step 3: Verify GPG Key Fingerprint
 ```bash
 # Verify the GPG key's fingerprint
 gpg --no-default-keyring \
@@ -125,13 +125,13 @@ uid   [ unknown] HashiCorp Security (HashiCorp Package Signing) <security+packag
 sub   rsa4096 XXXX-XX-XX [E]
 ```
 
-#### Step 4: Add HashiCorp Repository
+## Step 4: Add HashiCorp Repository
 ```bash
 # Add the official HashiCorp repository
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 ```
 
-#### Step 5: Install Terraform
+## Step 5: Install Terraform
 ```bash
 # Update package index
 sudo apt update
@@ -142,11 +142,11 @@ sudo apt-get install terraform
 
 ## **CentOS/RHEL/Fedora**
 
-#### Prerequisites
+## Prerequisites
 - CentOS 7+, RHEL 7+, or Fedora 30+
 - sudo privileges
 
-#### Installation Steps
+## Installation Steps
 ```bash
 # Install yum-config-manager
 sudo yum install -y yum-utils
@@ -158,7 +158,7 @@ sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashi
 sudo yum -y install terraform
 ```
 
-#### For Fedora (using dnf)
+## For Fedora (using dnf)
 ```bash
 # Add HashiCorp repository
 sudo dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
@@ -182,12 +182,12 @@ sudo pacman -S terraform
 
 ### **All Operating Systems**
 
-#### Step 1: Download Terraform Binary
+## Step 1: Download Terraform Binary
 1. Visit [terraform.io/downloads](https://terraform.io/downloads)
 2. Select your operating system and architecture
 3. Download the appropriate ZIP file
 
-#### Step 2: Extract and Install
+## Step 2: Extract and Install
 
 ### **macOS/Linux**
 ```bash
@@ -232,11 +232,11 @@ terraform version
 
 ### **Using Official HashiCorp Docker Image**
 
-#### Prerequisites
+## Prerequisites
 - Docker installed and running
 - Basic Docker knowledge
 
-#### Usage
+## Usage
 ```bash
 # Pull the latest Terraform image
 docker pull hashicorp/terraform:latest
@@ -251,7 +251,7 @@ docker run -it --rm -v $(pwd):/workspace -w /workspace hashicorp/terraform:lates
 alias terraform='docker run -it --rm -v $(pwd):/workspace -w /workspace hashicorp/terraform:latest'
 ```
 
-#### Docker Compose Example
+## Docker Compose Example
 ```yaml
 # docker-compose.yml
 version: '3.8'
@@ -266,7 +266,7 @@ services:
 
 ---
 
-## ✅ **Verification Steps**
+## **Verification Steps**
 
 ### **Basic Verification**
 ```bash
@@ -332,11 +332,11 @@ cd .. && rm -rf terraform-test
 
 ---
 
-## 🔧 **Enhanced Setup**
+## ####� **Enhanced Setup**
 
 ### **Tab Completion Setup**
 
-#### **Bash**
+## **Bash**
 ```bash
 # Ensure .bashrc exists
 touch ~/.bashrc
@@ -348,7 +348,7 @@ terraform -install-autocomplete
 source ~/.bashrc
 ```
 
-#### **Zsh**
+## **Zsh**
 ```bash
 # Ensure .zshrc exists
 touch ~/.zshrc
@@ -360,7 +360,7 @@ terraform -install-autocomplete
 source ~/.zshrc
 ```
 
-#### **Fish Shell**
+## **Fish Shell**
 ```bash
 # Install autocomplete for Fish
 terraform -install-autocomplete
@@ -368,21 +368,21 @@ terraform -install-autocomplete
 
 ### **IDE Integration**
 
-#### **VS Code Extensions**
+## **VS Code Extensions**
 - HashiCorp Terraform
 - Terraform doc snippets
 - Terraform Advanced Syntax Highlighting
 
-#### **IntelliJ/PyCharm**
+## **IntelliJ/PyCharm**
 - Terraform and HCL plugin
 
 ---
 
-## 🔍 **Version Management**
+## ####� **Version Management**
 
 ### **Managing Multiple Terraform Versions**
 
-#### **Using tfenv (Terraform Version Manager)**
+## **Using tfenv (Terraform Version Manager)**
 ```bash
 # Install tfenv
 git clone https://github.com/tfutils/tfenv.git ~/.tfenv
@@ -402,7 +402,7 @@ tfenv use 1.6.0
 tfenv use default 1.6.0
 ```
 
-#### **Using Terraform Switcher (tfswitch)**
+## **Using Terraform Switcher (tfswitch)**
 ```bash
 # Install tfswitch
 curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash
@@ -413,11 +413,11 @@ tfswitch
 
 ---
 
-## 🐛 **Troubleshooting**
+## ####� **Troubleshooting**
 
 ### **Common Issues and Solutions**
 
-#### **Issue: Command not found**
+## **Issue: Command not found**
 ```bash
 # Check if Terraform is in PATH
 which terraform
@@ -427,7 +427,7 @@ echo $PATH
 export PATH=$PATH:/path/to/terraform
 ```
 
-#### **Issue: Permission denied**
+## **Issue: Permission denied**
 ```bash
 # Make Terraform executable
 chmod +x /path/to/terraform
@@ -436,7 +436,7 @@ chmod +x /path/to/terraform
 sudo install terraform /usr/local/bin/
 ```
 
-#### **Issue: GPG key verification failed (Linux)**
+## **Issue: GPG key verification failed (Linux)**
 ```bash
 # Re-import GPG key
 wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
@@ -444,7 +444,7 @@ wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/
 # Verify fingerprint matches HashiCorp's official key
 ```
 
-#### **Issue: Outdated version**
+## **Issue: Outdated version**
 ```bash
 # Update using package manager
 # macOS
@@ -474,7 +474,7 @@ terraform -help
 
 ---
 
-## 📚 **Next Steps**
+## #### **Next Steps**
 
 ### **After Installation**
 1. **Create your first Terraform configuration**
@@ -497,7 +497,7 @@ terraform -help
 
 ---
 
-## 🔐 **Security Considerations**
+## #### **Security Considerations**
 
 ### **Best Practices**
 - Always verify GPG signatures when installing manually
@@ -514,14 +514,14 @@ terraform -help
 
 ---
 
-## 📝 **Summary**
+## #### **Summary**
 
 You now have multiple options to install Terraform on your system:
 
-✅ **Package Managers** - Easiest and recommended for most users  
-✅ **Manual Installation** - Full control over installation location  
-✅ **Docker** - Isolated environment, great for CI/CD  
-✅ **Version Managers** - Handle multiple Terraform versions  
+**Package Managers** - Easiest and recommended for most users  
+**Manual Installation** - Full control over installation location  
+**Docker** - Isolated environment, great for CI/CD  
+**Version Managers** - Handle multiple Terraform versions  
 
 Choose the method that best fits your environment and requirements. Once installed, you're ready to start your Infrastructure as Code journey with Terraform!
 

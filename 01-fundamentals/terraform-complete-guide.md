@@ -3,7 +3,7 @@
 
 ---
 
-## 📋 **Table of Contents**
+## ####� **Table of Contents**
 
 1. [Prerequisites](#prerequisites)
 2. [Terraform Installation](#terraform-installation)
@@ -17,7 +17,7 @@
 
 ---
 
-## 🎯 **Prerequisites**
+## #### **Prerequisites**
 
 ### **Required Tools**
 - **Terraform CLI** (1.2.0+)
@@ -38,11 +38,11 @@
 
 ---
 
-## 🚀 **Step 1: Terraform Installation**
+## #### **Step 1: Terraform Installation**
 
 ### **Option A: Package Managers (Recommended)**
 
-#### **macOS - Homebrew**
+## **macOS - Homebrew**
 ```bash
 # Install Homebrew if not already installed
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -57,7 +57,7 @@ brew install terraform
 terraform version
 ```
 
-#### **Windows - Chocolatey**
+## **Windows - Chocolatey**
 ```powershell
 # Install Chocolatey if not already installed (Run as Administrator)
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
@@ -69,7 +69,7 @@ choco install terraform
 terraform version
 ```
 
-#### **Ubuntu/Debian Linux**
+## **Ubuntu/Debian Linux**
 ```bash
 # Update system and install dependencies
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
@@ -91,7 +91,7 @@ terraform version
 
 ### **Option B: Manual Installation**
 
-#### **All Operating Systems**
+## **All Operating Systems**
 ```bash
 # Download latest version (check terraform.io/downloads for latest URL)
 # For Linux/macOS:
@@ -125,7 +125,7 @@ terraform -help
 
 ---
 
-## ☁️ **Step 2: AWS Setup & Configuration**
+## ##�#### **Step 2: AWS Setup & Configuration**
 
 ### **2.1: Create AWS Account**
 1. Visit [aws.amazon.com](https://aws.amazon.com)
@@ -148,19 +148,19 @@ terraform -help
 
 ### **2.3: Install AWS CLI**
 
-#### **macOS**
+## **macOS**
 ```bash
 brew install awscli
 ```
 
-#### **Windows**
+## **Windows**
 ```powershell
 # Download and install from: https://aws.amazon.com/cli/
 # Or use pip:
 pip install awscli
 ```
 
-#### **Linux**
+## **Linux**
 ```bash
 # Ubuntu/Debian
 sudo apt install awscli
@@ -171,7 +171,7 @@ pip3 install awscli
 
 ### **2.4: Configure AWS Credentials**
 
-#### **Method 1: Environment Variables (Recommended for Learning)**
+## **Method 1: Environment Variables (Recommended for Learning)**
 ```bash
 # Set environment variables (replace with your actual keys)
 export AWS_ACCESS_KEY_ID="AKIAIOSFODNN7EXAMPLE"
@@ -184,7 +184,7 @@ $env:AWS_SECRET_ACCESS_KEY="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 $env:AWS_DEFAULT_REGION="us-west-2"
 ```
 
-#### **Method 2: AWS CLI Configuration**
+## **Method 2: AWS CLI Configuration**
 ```bash
 # Configure AWS CLI
 aws configure
@@ -215,7 +215,7 @@ aws sts get-caller-identity
 
 ---
 
-## 🏗️ **Step 3: Create Your First Infrastructure**
+## ######## **Step 3: Create Your First Infrastructure**
 
 ### **3.1: Create Project Directory**
 ```bash
@@ -229,7 +229,7 @@ pwd
 
 ### **3.2: Create Terraform Configuration Files**
 
-#### **File 1: terraform.tf (Terraform Configuration)**
+## **File 1: terraform.tf (Terraform Configuration)**
 ```bash
 # Create terraform.tf file
 cat > terraform.tf << 'EOF'
@@ -246,7 +246,7 @@ terraform {
 EOF
 ```
 
-#### **File 2: main.tf (Infrastructure Definition)**
+## **File 2: main.tf (Infrastructure Definition)**
 ```bash
 # Create main.tf file
 cat > main.tf << 'EOF'
@@ -283,23 +283,23 @@ EOF
 
 ### **3.3: Understanding the Configuration**
 
-#### **terraform.tf Block**
+## **terraform.tf Block**
 - **required_providers:** Specifies which providers to use
 - **source:** Where to download the provider from
 - **version:** Version constraint for the provider
 - **required_version:** Minimum Terraform version required
 
-#### **provider Block**
+## **provider Block**
 - **aws:** Configures the AWS provider
 - **region:** AWS region where resources will be created
 
-#### **data Block**
+## **data Block**
 - **aws_ami:** Queries AWS for the latest Ubuntu AMI
 - **most_recent:** Gets the newest matching AMI
 - **filter:** Searches for specific AMI name pattern
 - **owners:** Canonical's AWS account ID
 
-#### **resource Block**
+## **resource Block**
 - **aws_instance:** Creates an EC2 instance
 - **ami:** Uses the AMI ID from the data source
 - **instance_type:** t2.micro (free tier eligible)
@@ -307,7 +307,7 @@ EOF
 
 ---
 
-## ⚙️ **Step 4: Terraform Workflow**
+## ###### **Step 4: Terraform Workflow**
 
 ### **4.1: Format Configuration**
 ```bash
@@ -406,7 +406,7 @@ terraform apply
 
 ### **4.6: Verify Infrastructure Creation**
 
-#### **Using Terraform**
+## **Using Terraform**
 ```bash
 # List resources in state
 terraform state list
@@ -419,7 +419,7 @@ terraform state list
 terraform show
 ```
 
-#### **Using AWS CLI**
+## **Using AWS CLI**
 ```bash
 # List EC2 instances
 aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name,Tags[?Key==`Name`].Value|[0]]' --output table
@@ -430,7 +430,7 @@ aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Sta
 # |  i-0c636e158c30e48f9|  running  |  learn-terraform  |
 ```
 
-#### **Using AWS Console**
+## **Using AWS Console**
 1. Login to AWS Console
 2. Navigate to EC2 Dashboard
 3. Click "Instances"
@@ -438,7 +438,7 @@ aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Sta
 
 ---
 
-## 📊 **Step 5: Understanding State Management**
+## #### **Step 5: Understanding State Management**
 
 ### **5.1: Terraform State File**
 ```bash
@@ -498,7 +498,7 @@ terraform state push
 
 ---
 
-## 🧹 **Step 6: Cleanup & Best Practices**
+## ##�� **Step 6: Cleanup & Best Practices**
 
 ### **6.1: Destroy Infrastructure**
 ```bash
@@ -530,14 +530,14 @@ aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,Sta
 ### **6.3: Project Structure Best Practices**
 ```
 learn-terraform-aws/
-├── terraform.tf          # Terraform and provider configuration
-├── main.tf               # Main infrastructure resources
-├── variables.tf          # Input variables (optional)
-├── outputs.tf            # Output values (optional)
-├── terraform.tfstate     # State file (auto-generated)
-├── terraform.tfstate.backup  # State backup (auto-generated)
-├── .terraform/           # Provider plugins (auto-generated)
-└── .terraform.lock.hcl   # Provider version lock (auto-generated)
+##�###### terraform.tf          # Terraform and provider configuration
+##�###### main.tf               # Main infrastructure resources
+##�###### variables.tf          # Input variables (optional)
+##�###### outputs.tf            # Output values (optional)
+##�###### terraform.tfstate     # State file (auto-generated)
+##�###### terraform.tfstate.backup  # State backup (auto-generated)
+##�###### .terraform/           # Provider plugins (auto-generated)
+########## .terraform.lock.hcl   # Provider version lock (auto-generated)
 ```
 
 ### **6.4: .gitignore for Terraform**
@@ -579,11 +579,11 @@ EOF
 
 ---
 
-## 🐛 **Step 7: Troubleshooting**
+## ####� **Step 7: Troubleshooting**
 
 ### **Common Issues and Solutions**
 
-#### **Issue 1: Terraform not found**
+## **Issue 1: Terraform not found**
 ```bash
 # Error: terraform: command not found
 
@@ -595,7 +595,7 @@ echo $PATH
 export PATH=$PATH:/usr/local/bin
 ```
 
-#### **Issue 2: AWS credentials not configured**
+## **Issue 2: AWS credentials not configured**
 ```bash
 # Error: No valid credential sources found
 
@@ -608,7 +608,7 @@ export AWS_DEFAULT_REGION="us-west-2"
 aws configure
 ```
 
-#### **Issue 3: Permission denied errors**
+## **Issue 3: Permission denied errors**
 ```bash
 # Error: UnauthorizedOperation
 
@@ -620,7 +620,7 @@ aws sts get-caller-identity
 # - PowerUserAccess (broader permissions)
 ```
 
-#### **Issue 4: Region-specific AMI not found**
+## **Issue 4: Region-specific AMI not found**
 ```bash
 # Error: InvalidAMIID.NotFound
 
@@ -629,7 +629,7 @@ aws sts get-caller-identity
 aws ec2 describe-images --owners 099720109477 --filters "Name=name,Values=ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*" --query 'Images[*].[ImageId,Name]' --output table
 ```
 
-#### **Issue 5: State file locked**
+## **Issue 5: State file locked**
 ```bash
 # Error: Error acquiring the state lock
 
@@ -661,11 +661,11 @@ terraform refresh
 
 ---
 
-## 🎯 **Step 8: Next Steps**
+## #### **Step 8: Next Steps**
 
 ### **8.1: Enhance Your Configuration**
 
-#### **Add Variables (variables.tf)**
+## **Add Variables (variables.tf)**
 ```hcl
 variable "instance_type" {
   description = "EC2 instance type"
@@ -686,7 +686,7 @@ variable "environment" {
 }
 ```
 
-#### **Add Outputs (outputs.tf)**
+## **Add Outputs (outputs.tf)**
 ```hcl
 output "instance_id" {
   description = "ID of the EC2 instance"
@@ -704,7 +704,7 @@ output "instance_public_dns" {
 }
 ```
 
-#### **Update main.tf to use variables**
+## **Update main.tf to use variables**
 ```hcl
 provider "aws" {
   region = var.region
@@ -724,21 +724,21 @@ resource "aws_instance" "app_server" {
 
 ### **8.2: Learning Path**
 
-#### **Beginner Level**
-1. ✅ **Complete this tutorial**
+## **Beginner Level**
+1. **Complete this tutorial**
 2. **Add security groups and key pairs**
 3. **Create multiple resources**
 4. **Use terraform.tfvars files**
 5. **Explore different providers**
 
-#### **Intermediate Level**
+## **Intermediate Level**
 1. **Learn about modules**
 2. **Implement remote state storage**
 3. **Use workspaces**
 4. **Implement CI/CD with Terraform**
 5. **Learn about data sources**
 
-#### **Advanced Level**
+## **Advanced Level**
 1. **Custom providers**
 2. **Terraform Cloud/Enterprise**
 3. **Policy as Code (Sentinel)**
@@ -747,57 +747,57 @@ resource "aws_instance" "app_server" {
 
 ### **8.3: Useful Resources**
 
-#### **Official Documentation**
+## **Official Documentation**
 - [Terraform Documentation](https://terraform.io/docs)
 - [AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [Terraform Registry](https://registry.terraform.io)
 
-#### **Learning Resources**
+## **Learning Resources**
 - [HashiCorp Learn](https://learn.hashicorp.com/terraform)
 - [Terraform Best Practices](https://www.terraform-best-practices.com)
 - [AWS Free Tier](https://aws.amazon.com/free)
 
-#### **Community**
+## **Community**
 - [Terraform Community Forum](https://discuss.hashicorp.com/c/terraform-core)
 - [r/Terraform Reddit](https://reddit.com/r/Terraform)
 - [Terraform GitHub](https://github.com/hashicorp/terraform)
 
 ---
 
-## 📝 **Summary Checklist**
+## #### **Summary Checklist**
 
 ### **Installation & Setup**
-- ✅ Terraform installed and verified
-- ✅ AWS CLI installed and configured
-- ✅ AWS credentials set up
-- ✅ IAM user with appropriate permissions
+- Terraform installed and verified
+- AWS CLI installed and configured
+- AWS credentials set up
+- IAM user with appropriate permissions
 
 ### **First Infrastructure**
-- ✅ Project directory created
-- ✅ Configuration files written
-- ✅ Terraform initialized
-- ✅ Configuration validated
-- ✅ Infrastructure planned and applied
-- ✅ Resources verified in AWS
-- ✅ Infrastructure destroyed and cleaned up
+- Project directory created
+- Configuration files written
+- Terraform initialized
+- Configuration validated
+- Infrastructure planned and applied
+- Resources verified in AWS
+- Infrastructure destroyed and cleaned up
 
 ### **Understanding Gained**
-- ✅ Terraform workflow (init, plan, apply, destroy)
-- ✅ HCL syntax and structure
-- ✅ Provider configuration
-- ✅ Resource definitions
-- ✅ Data sources
-- ✅ State management basics
+- Terraform workflow (init, plan, apply, destroy)
+- HCL syntax and structure
+- Provider configuration
+- Resource definitions
+- Data sources
+- State management basics
 
 ### **Next Steps Identified**
-- ✅ Variables and outputs
-- ✅ Modules and reusability
-- ✅ Remote state storage
-- ✅ Advanced Terraform features
+- Variables and outputs
+- Modules and reusability
+- Remote state storage
+- Advanced Terraform features
 
 ---
 
-**🎉 Congratulations!** You've successfully completed your first Terraform infrastructure deployment. You now have the foundation to build more complex infrastructure as code solutions.
+**####� Congratulations!** You've successfully completed your first Terraform infrastructure deployment. You now have the foundation to build more complex infrastructure as code solutions.
 
 **Time to Complete:** ~30 minutes  
 **Cost:** $0 (using AWS free tier)  

@@ -30,7 +30,7 @@
 - **No Version Control** - Can't track changes or rollback
 - **Documentation Drift** - Docs become outdated
 - **Scaling Issues** - Manual work doesn't scale
-- **Environment Inconsistency** - Dev ‚â† Staging ‚â† Production
+- **Environment Inconsistency** - Dev ##â† Staging ##â† Production
 
 ### Real-World Pain Points
 - "It works on my machine"
@@ -45,8 +45,8 @@
 
 ### Evolution Timeline
 ```
-Manual Scripts ‚Üí Configuration Management ‚Üí Infrastructure as Code
-     ‚Üì                    ‚Üì                        ‚Üì
+Manual Scripts ##Ü## Configuration Management ##Ü## Infrastructure as Code
+     ##Ü##                    ##Ü##                        ##Ü##
    Bash/PowerShell    Ansible/Puppet         Terraform/CloudFormation
 ```
 
@@ -64,18 +64,18 @@ Manual Scripts ‚Üí Configuration Management ‚Üí Infrastructure as Code
 
 ### Three Categories of IaC Tools
 
-#### 1. Configuration Management
+## 1. Configuration Management
 - **Ansible** - Agentless, YAML-based
 - **Puppet** - Agent-based, declarative
 - **Chef** - Agent-based, Ruby DSL
 - **SaltStack** - Agent/agentless, Python-based
 
-#### 2. Server Templating
+## 2. Server Templating
 - **Docker** - Container images
 - **Packer** - VM/AMI images
 - **Vagrant** - Development environments
 
-#### 3. Provisioning Tools
+## 3. Provisioning Tools
 - **Terraform** - Multi-cloud provisioning
 - **CloudFormation** - AWS-specific
 - **Pulumi** - Programming language-based
@@ -126,8 +126,8 @@ Manual Scripts ‚Üí Configuration Management ‚Üí Infrastructure as Code
 
 ### Immutable vs Mutable
 ```
-Mutable: Server ‚Üí Configure ‚Üí Update ‚Üí Patch
-Immutable: Image ‚Üí Deploy ‚Üí Replace ‚Üí Deploy New Image
+Mutable: Server ##Ü## Configure ##Ü## Update ##Ü## Patch
+Immutable: Image ##Ü## Deploy ##Ü## Replace ##Ü## Deploy New Image
 ```
 
 ---
@@ -160,13 +160,13 @@ Immutable: Image ‚Üí Deploy ‚Üí Replace ‚Üí Deploy New Image
 
 ### Terraform's Unique Advantages
 
-#### 1. Multi-Platform Support
+## 1. Multi-Platform Support
 - **Physical Machines** - Bare metal servers
 - **Virtualization** - VMware vSphere
 - **Cloud Providers** - AWS, Azure, GCP
 - **Hybrid/Multi-Cloud** - Consistent tooling
 
-#### 2. Massive Provider Ecosystem
+## 2. Massive Provider Ecosystem
 **Infrastructure Providers:**
 - AWS, Azure, GCP, Alibaba Cloud
 - VMware, OpenStack, Kubernetes
@@ -187,16 +187,16 @@ Immutable: Image ‚Üí Deploy ‚Üí Replace ‚Üí Deploy New Image
 ### Popular Terraform Providers
 ```
 Infrastructure:     Monitoring:        Security:
-‚Ä¢ AWS              ‚Ä¢ DataDog          ‚Ä¢ Auth0
-‚Ä¢ Azure            ‚Ä¢ Grafana          ‚Ä¢ Palo Alto
-‚Ä¢ GCP              ‚Ä¢ Wavefront        ‚Ä¢ Vault
-‚Ä¢ VMware           ‚Ä¢ Sumo Logic       ‚Ä¢ Okta
+##¢ AWS              ##¢ DataDog          ##¢ Auth0
+##¢ Azure            ##¢ Grafana          ##¢ Palo Alto
+##¢ GCP              ##¢ Wavefront        ##¢ Vault
+##¢ VMware           ##¢ Sumo Logic       ##¢ Okta
 
 Networking:        Databases:         Version Control:
-‚Ä¢ CloudFlare       ‚Ä¢ MongoDB          ‚Ä¢ GitHub
-‚Ä¢ BigIP            ‚Ä¢ MySQL            ‚Ä¢ GitLab
-‚Ä¢ DNS              ‚Ä¢ PostgreSQL       ‚Ä¢ Bitbucket
-‚Ä¢ Infoblox         ‚Ä¢ InfluxDB         ‚Ä¢ Azure DevOps
+##¢ CloudFlare       ##¢ MongoDB          ##¢ GitHub
+##¢ BigIP            ##¢ MySQL            ##¢ GitLab
+##¢ DNS              ##¢ PostgreSQL       ##¢ Bitbucket
+##¢ Infoblox         ##¢ InfluxDB         ##¢ Azure DevOps
 ```
 
 ### Provider Registry
@@ -230,9 +230,9 @@ resource "aws_s3_bucket" "finance" {
 
 ### Terraform Workflow
 ```
-Write ‚Üí Plan ‚Üí Apply
-  ‚Üì      ‚Üì      ‚Üì
-main.tf ‚Üí Preview ‚Üí Deploy
+Write ##Ü## Plan ##Ü## Apply
+  ##Ü##      ##Ü##      ##Ü##
+main.tf ##Ü## Preview ##Ü## Deploy
 ```
 
 ---
@@ -242,8 +242,8 @@ main.tf ‚Üí Preview ‚Üí Deploy
 
 ### Terraform State (terraform.tfstate)
 ```
-Real World Infrastructure ‚Üê‚Üí terraform.tfstate ‚Üê‚Üí Configuration Files
-         ‚Üë                                              ‚Üë
+Real World Infrastructure ##Ü##Ü## terraform.tfstate ##Ü##Ü## Configuration Files
+         ##Üë                                              ##Üë
     AWS Resources                                   main.tf
 ```
 
@@ -283,8 +283,8 @@ resource_type = file
 resource_name = pet
 
 Arguments:
-‚îú‚îÄ‚îÄ filename = "/root/pets.txt"
-‚îî‚îÄ‚îÄ content = "We love pets!"
+##ú###### filename = "/root/pets.txt"
+########## content = "We love pets!"
 ```
 
 ### Resource Documentation

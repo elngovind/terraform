@@ -85,10 +85,10 @@ D) It's optional and not required for Terraform to work
 ### Question 5: Terraform Workflow
 What is the CORRECT sequence of Terraform commands for first-time deployment?
 
-A) `terraform plan` â†’ `terraform apply` â†’ `terraform init`  
-B) `terraform apply` â†’ `terraform init` â†’ `terraform plan`  
-C) `terraform init` â†’ `terraform plan` â†’ `terraform apply`  
-D) `terraform init` â†’ `terraform apply` â†’ `terraform plan`  
+A) `terraform plan` ##†## `terraform apply` ##†## `terraform init`  
+B) `terraform apply` ##†## `terraform init` ##†## `terraform plan`  
+C) `terraform init` ##†## `terraform plan` ##†## `terraform apply`  
+D) `terraform init` ##†## `terraform apply` ##†## `terraform plan`  
 
 **Answer: C**  
 **Explanation:** Always start with `terraform init` to initialize providers, then `terraform plan` to preview changes, finally `terraform apply` to deploy.
@@ -130,13 +130,13 @@ D) Manual deployment is always faster
 ---
 
 ## Key Day 01 Concepts Covered:
-âœ… IaC advantages over manual deployment  
-âœ… Terraform vs other IaC tools  
-âœ… HCL syntax basics  
-âœ… Terraform state fundamentals  
-âœ… Basic Terraform workflow  
-âœ… Provider concept  
-âœ… Manual deployment challenges  
+IaC advantages over manual deployment  
+Terraform vs other IaC tools  
+HCL syntax basics  
+Terraform state fundamentals  
+Basic Terraform workflow  
+Provider concept  
+Manual deployment challenges  
 
 ---
 

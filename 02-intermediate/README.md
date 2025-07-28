@@ -58,26 +58,26 @@ By the end of Day 2, you will:
 
 ```
 ecommerce-infrastructure/
-├── main.tf                    # Root orchestration
-├── variables.tf               # Input variables
-├── outputs.tf                 # Root outputs
-├── locals.tf                 # Computed values
-├── data.tf                   # Data sources
-├── versions.tf               # Provider versions
-├── terraform.tfvars          # Default values
-├── 
-├── modules/                  # Reusable modules
-│   ├── networking/           # VPC, Subnets
-│   ├── security/             # Security Groups
-│   ├── compute/              # EC2, ASG
-│   ├── database/             # RDS
-│   ├── loadbalancer/         # ALB
-│   └── monitoring/           # CloudWatch
-│
-└── environments/             # Environment configs
-    ├── dev/
-    ├── staging/
-    └── prod/
+##�###### main.tf                    # Root orchestration
+##�###### variables.tf               # Input variables
+##�###### outputs.tf                 # Root outputs
+##�###### locals.tf                 # Computed values
+##�###### data.tf                   # Data sources
+##�###### versions.tf               # Provider versions
+##�###### terraform.tfvars          # Default values
+##�###### 
+##�###### modules/                  # Reusable modules
+##�   ##�###### networking/           # VPC, Subnets
+##�   ##�###### security/             # Security Groups
+##�   ##�###### compute/              # EC2, ASG
+##�   ##�###### database/             # RDS
+##�   ##�###### loadbalancer/         # ALB
+##�   ########## monitoring/           # CloudWatch
+##�
+########## environments/             # Environment configs
+    ##�###### dev/
+    ##�###### staging/
+    ########## prod/
 ```
 
 ---

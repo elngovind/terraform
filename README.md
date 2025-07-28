@@ -14,7 +14,7 @@ Welcome to the comprehensive Terraform learning repository! This guide takes you
 
 ---
 
-## 📖 Step-by-Step Learning Journey
+## Step-by-Step Learning Journey
 
 ### Phase 1: Fundamentals (Day 1)
 **Duration:** 2.5 hours | **Level:** Beginner
@@ -78,29 +78,29 @@ Welcome to the comprehensive Terraform learning repository! This guide takes you
 
 ```
 terraform-learning/
-├── 01-fundamentals/          # Day 1 - Basics
-│   ├── terraform-installation-guide.md
-│   ├── terraform-day01-lecture.md
-│   ├── terraform-basic-mcqs-day01.md
-│   └── terraform-complete-guide.md
-│
-├── 02-intermediate/          # Day 2 - Modular Architecture
-│   ├── terraform-day2-complete-modular-guide.md
-│   ├── terraform-mcqs.md
-│   └── ecommerce-infrastructure/    # Complete project
-│       ├── modules/
-│       ├── environments/
-│       └── *.tf files
-│
-├── 03-presentations/         # Teaching Materials
-│   ├── terraform-licensing-presentation.html
-│   ├── terraform-advanced-concepts.html
-│   ├── iac-tools-comparison.html
-│   └── terraform-unique-demos.md
-│
-└── 04-resources/            # Additional Resources
-    ├── ec2-cft.yaml           # CloudFormation comparison
-    └── terraform-vpc-ec2-asg-complete-guide.md
+##�###### 01-fundamentals/          # Day 1 - Basics
+##�   ##�###### terraform-installation-guide.md
+##�   ##�###### terraform-day01-lecture.md
+##�   ##�###### terraform-basic-mcqs-day01.md
+##�   ########## terraform-complete-guide.md
+##�
+##�###### 02-intermediate/          # Day 2 - Modular Architecture
+##�   ##�###### terraform-day2-complete-modular-guide.md
+##�   ##�###### terraform-mcqs.md
+##�   ########## ecommerce-infrastructure/    # Complete project
+##�       ##�###### modules/
+##�       ##�###### environments/
+##�       ########## *.tf files
+##�
+##�###### 03-presentations/         # Teaching Materials
+##�   ##�###### terraform-licensing-presentation.html
+##�   ##�###### terraform-advanced-concepts.html
+##�   ##�###### iac-tools-comparison.html
+##�   ########## terraform-unique-demos.md
+##�
+########## 04-resources/            # Additional Resources
+    ##�###### ec2-cft.yaml           # CloudFormation comparison
+    ########## terraform-vpc-ec2-asg-complete-guide.md
 ```
 
 ---

@@ -3,7 +3,7 @@
 
 ---
 
-## 🎯 Today's Mission: Build a Complete E-Commerce Platform Infrastructure
+## #### Today's Mission: Build a Complete E-Commerce Platform Infrastructure
 
 **What we're building:** A scalable, secure, and production-ready infrastructure for an e-commerce application with:
 - Multi-tier architecture (Web, App, Database)
@@ -15,82 +15,82 @@
 
 ---
 
-## 🏗️ Architecture Overview
+## ######## Architecture Overview
 
 ```
 Production E-Commerce Infrastructure:
-├── 🌐 Public Tier (Load Balancers)
-├── 🖥️  Web Tier (Frontend Servers)
-├── ⚙️  Application Tier (Backend APIs)
-├── 🗄️  Database Tier (RDS with replicas)
-├── 📊 Monitoring (CloudWatch, SNS)
-└── 🔒 Security (WAF, Security Groups)
+##�###### #### Public Tier (Load Balancers)
+##�###### ########  Web Tier (Frontend Servers)
+##�###### ######  Application Tier (Backend APIs)
+##�###### ########  Database Tier (RDS with replicas)
+##�###### #### Monitoring (CloudWatch, SNS)
+########## #### Security (WAF, Security Groups)
 ```
 
 ---
 
-## 📁 Project Structure (Modular Approach)
+## #### Project Structure (Modular Approach)
 
 ```bash
 ecommerce-infrastructure/
-├── main.tf                    # Root module orchestration
-├── variables.tf               # Root variables
-├── outputs.tf                 # Root outputs
-├── terraform.tfvars          # Default values
-├── locals.tf                 # Local computations
-├── data.tf                   # Data sources
-├── versions.tf               # Provider versions
-├── 
-├── modules/                  # Reusable modules
-│   ├── networking/           # VPC, Subnets, Routes
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │   └── README.md
-│   │
-│   ├── security/             # Security Groups, NACLs
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   └── outputs.tf
-│   │
-│   ├── compute/              # EC2, ASG, Launch Templates
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │   └── user_data/
-│   │       ├── web_server.sh
-│   │       └── app_server.sh
-│   │
-│   ├── database/             # RDS, Parameter Groups
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   └── outputs.tf
-│   │
-│   ├── loadbalancer/         # ALB, Target Groups
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   └── outputs.tf
-│   │
-│   └── monitoring/           # CloudWatch, SNS
-│       ├── main.tf
-│       ├── variables.tf
-│       └── outputs.tf
-│
-└── environments/             # Environment-specific configs
-    ├── dev/
-    │   ├── terraform.tfvars
-    │   └── backend.tf
-    ├── staging/
-    │   ├── terraform.tfvars
-    │   └── backend.tf
-    └── prod/
-        ├── terraform.tfvars
-        └── backend.tf
+##�###### main.tf                    # Root module orchestration
+##�###### variables.tf               # Root variables
+##�###### outputs.tf                 # Root outputs
+##�###### terraform.tfvars          # Default values
+##�###### locals.tf                 # Local computations
+##�###### data.tf                   # Data sources
+##�###### versions.tf               # Provider versions
+##�###### 
+##�###### modules/                  # Reusable modules
+##�   ##�###### networking/           # VPC, Subnets, Routes
+##�   ##�   ##�###### main.tf
+##�   ##�   ##�###### variables.tf
+##�   ##�   ##�###### outputs.tf
+##�   ##�   ########## README.md
+##�   ##�
+##�   ##�###### security/             # Security Groups, NACLs
+##�   ##�   ##�###### main.tf
+##�   ##�   ##�###### variables.tf
+##�   ##�   ########## outputs.tf
+##�   ##�
+##�   ##�###### compute/              # EC2, ASG, Launch Templates
+##�   ##�   ##�###### main.tf
+##�   ##�   ##�###### variables.tf
+##�   ##�   ##�###### outputs.tf
+##�   ##�   ########## user_data/
+##�   ##�       ##�###### web_server.sh
+##�   ##�       ########## app_server.sh
+##�   ##�
+##�   ##�###### database/             # RDS, Parameter Groups
+##�   ##�   ##�###### main.tf
+##�   ##�   ##�###### variables.tf
+##�   ##�   ########## outputs.tf
+##�   ##�
+##�   ##�###### loadbalancer/         # ALB, Target Groups
+##�   ##�   ##�###### main.tf
+##�   ##�   ##�###### variables.tf
+##�   ##�   ########## outputs.tf
+##�   ##�
+##�   ########## monitoring/           # CloudWatch, SNS
+##�       ##�###### main.tf
+##�       ##�###### variables.tf
+##�       ########## outputs.tf
+##�
+########## environments/             # Environment-specific configs
+    ##�###### dev/
+    ##�   ##�###### terraform.tfvars
+    ##�   ########## backend.tf
+    ##�###### staging/
+    ##�   ##�###### terraform.tfvars
+    ##�   ########## backend.tf
+    ########## prod/
+        ##�###### terraform.tfvars
+        ########## backend.tf
 ```
 
 ---
 
-## 🚀 Step 1: Root Configuration Setup
+## #### Step 1: Root Configuration Setup
 
 ### versions.tf - Provider Requirements
 ```hcl
@@ -308,7 +308,7 @@ variable "enable_read_replica" {
 
 ---
 
-## 🌐 Step 2: Networking Module
+## #### Step 2: Networking Module
 
 ### modules/networking/variables.tf
 ```hcl
@@ -564,7 +564,7 @@ output "public_route_table_id" {
 
 ---
 
-## 🔒 Step 3: Security Module
+## #### Step 3: Security Module
 
 ### modules/security/variables.tf
 ```hcl
@@ -778,7 +778,7 @@ output "db_security_group_id" {
 
 ---
 
-## 💾 Step 4: Database Module
+## ####� Step 4: Database Module
 
 ### modules/database/variables.tf
 ```hcl
@@ -1017,7 +1017,7 @@ output "read_replica_endpoint" {
 
 ---
 
-## 🖥️ Step 5: Compute Module
+## ######## Step 5: Compute Module
 
 ### modules/compute/variables.tf
 ```hcl
@@ -1180,31 +1180,31 @@ cat <<'EOF' > /var/www/html/index.php
 <body>
     <div class="container">
         <div class="header">
-            <h1>🛒 E-Commerce Platform</h1>
+            <h1>##�## E-Commerce Platform</h1>
             <p>Environment: <strong>${environment}</strong></p>
         </div>
         
         <div class="info-grid">
             <div class="info-card">
-                <h3>🖥️ Server Info</h3>
+                <h3>######## Server Info</h3>
                 <p><strong>Instance ID:</strong><br><?php echo file_get_contents('http://169.254.169.254/latest/meta-data/instance-id'); ?></p>
             </div>
             <div class="info-card">
-                <h3>🌍 Location</h3>
+                <h3>####� Location</h3>
                 <p><strong>Availability Zone:</strong><br><?php echo file_get_contents('http://169.254.169.254/latest/meta-data/placement/availability-zone'); ?></p>
             </div>
             <div class="info-card">
-                <h3>⚡ Instance Type</h3>
+                <h3>##� Instance Type</h3>
                 <p><strong>Type:</strong><br><?php echo file_get_contents('http://169.254.169.254/latest/meta-data/instance-type'); ?></p>
             </div>
             <div class="info-card">
-                <h3>🕒 Timestamp</h3>
+                <h3>##�## Timestamp</h3>
                 <p><strong>Current Time:</strong><br><?php echo date('Y-m-d H:i:s T'); ?></p>
             </div>
         </div>
         
         <div class="status">
-            <h2>✅ Web Tier Active</h2>
+            <h2>Web Tier Active</h2>
             <p>This is the web tier of our multi-tier e-commerce architecture</p>
         </div>
     </div>
@@ -1411,7 +1411,7 @@ output "app_launch_template_id" {
 
 ---
 
-## ⚖️ Step 6: Load Balancer Module
+## ###### Step 6: Load Balancer Module
 
 ### modules/loadbalancer/main.tf
 ```hcl
@@ -1475,7 +1475,7 @@ resource "aws_autoscaling_attachment" "web" {
 
 ---
 
-## 🎯 Step 7: Main Configuration (Orchestration)
+## #### Step 7: Main Configuration (Orchestration)
 
 ### main.tf
 ```hcl
@@ -1551,7 +1551,7 @@ module "loadbalancer" {
 
 ---
 
-## 📊 Step 8: Comprehensive Outputs
+## #### Step 8: Comprehensive Outputs
 
 ### outputs.tf
 ```hcl
@@ -1628,7 +1628,7 @@ output "environment_summary" {
 
 ---
 
-## 🌍 Step 9: Environment Configurations
+## ####� Step 9: Environment Configurations
 
 ### environments/dev/terraform.tfvars
 ```hcl
@@ -1693,7 +1693,7 @@ common_tags = {
 
 ---
 
-## 🚀 Deployment Commands
+## #### Deployment Commands
 
 ```bash
 # Initialize Terraform
@@ -1724,7 +1724,7 @@ terraform destroy -var-file="environments/dev/terraform.tfvars" -auto-approve
 
 ---
 
-## 🎓 Key Learning Outcomes
+## #### Key Learning Outcomes
 
 ### 1. **Modular Architecture Benefits**
 - **Reusability**: Modules can be used across environments
@@ -1751,7 +1751,7 @@ terraform destroy -var-file="environments/dev/terraform.tfvars" -auto-approve
 
 ---
 
-## 🔧 Advanced Features Demonstrated
+## ####� Advanced Features Demonstrated
 
 ### 1. **Dynamic Resource Creation**
 ```hcl
@@ -1790,22 +1790,22 @@ depends_on = [aws_internet_gateway.main]
 
 ---
 
-## 🎯 Production Readiness Checklist
+## #### Production Readiness Checklist
 
-- ✅ **Multi-AZ Deployment**: High availability across zones
-- ✅ **Auto Scaling**: Dynamic capacity management
-- ✅ **Load Balancing**: Traffic distribution
-- ✅ **Database Encryption**: Data protection at rest
-- ✅ **Secrets Management**: Secure credential storage
-- ✅ **Monitoring**: CloudWatch integration
-- ✅ **Backup Strategy**: Automated database backups
-- ✅ **Security Groups**: Least privilege access
-- ✅ **Tagging Strategy**: Resource organization and cost tracking
-- ✅ **Environment Separation**: Dev/Staging/Prod isolation
+- **Multi-AZ Deployment**: High availability across zones
+- **Auto Scaling**: Dynamic capacity management
+- **Load Balancing**: Traffic distribution
+- **Database Encryption**: Data protection at rest
+- **Secrets Management**: Secure credential storage
+- **Monitoring**: CloudWatch integration
+- **Backup Strategy**: Automated database backups
+- **Security Groups**: Least privilege access
+- **Tagging Strategy**: Resource organization and cost tracking
+- **Environment Separation**: Dev/Staging/Prod isolation
 
 ---
 
-## 🚀 Next Steps & Advanced Topics
+## #### Next Steps & Advanced Topics
 
 1. **State Management**: Remote backends with S3 + DynamoDB
 2. **CI/CD Integration**: GitLab/GitHub Actions pipelines
@@ -1818,4 +1818,4 @@ depends_on = [aws_internet_gateway.main]
 
 ---
 
-**🎉 Congratulations!** You've built a production-ready, scalable, and maintainable infrastructure using Terraform best practices. This modular approach will serve as a foundation for complex enterprise deployments.
+**####� Congratulations!** You've built a production-ready, scalable, and maintainable infrastructure using Terraform best practices. This modular approach will serve as a foundation for complex enterprise deployments.
