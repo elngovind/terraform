@@ -12,7 +12,8 @@ By the end of Day 2, you will:
 - Understand variables, outputs, and all Terraform data types
 - Implement dynamic expressions with functions, conditionals, and loops
 - Use .tfvars files and understand variable precedence
-- Build parametrized, environment-aware infrastructure
+- Build modular infrastructure with reusable components
+- Create parametrized, environment-aware infrastructure
 - Apply production-ready Terraform patterns
 
 ---
@@ -37,11 +38,22 @@ By the end of Day 2, you will:
 - Reusable infrastructure components
 - Module composition strategies
 
-### Session 3: Hands-On Project (90 minutes)
+### Session 3: Hands-On Projects (90 minutes)
+
+#### Part A: Simple Modular Demo (45 minutes)
+**File:** [03-simple-modular-demo.md](03-simple-modular-demo.md)
+
+**What You'll Build:**
+- **Step-by-step modular project** for beginners
+- Simple web application with 3 modules (networking, security, compute)
+- Clear module communication and data flow
+- Easy-to-understand module structure
+
+#### Part B: Advanced Parametrized Infrastructure (45 minutes)
 **File:** [03-hands-on-project.md](03-hands-on-project.md)
 
 **What You'll Build:**
-- **Parametrized EC2 + VPC Infrastructure**
+- **Complex parametrized EC2 + VPC Infrastructure**
 - Dynamic subnet creation using for_each loops
 - Multiple EC2 instances from object lists
 - Environment-specific configurations (dev vs prod)
@@ -52,6 +64,27 @@ By the end of Day 2, you will:
 **File:** [04-assessment.md](04-assessment.md)
 - 6 application-oriented questions covering advanced concepts
 - Minimum passing score: 4/6
+
+---
+
+## Learning Path
+
+### Beginner Path (Recommended)
+1. **Start with:** [Simple Modular Demo](03-simple-modular-demo.md)
+   - Learn basic module concepts
+   - Understand module communication
+   - Build confidence with simple project
+
+2. **Progress to:** [Advanced Parametrized Project](03-hands-on-project.md)
+   - Apply advanced concepts
+   - Work with complex data types
+   - Implement production patterns
+
+### Advanced Path (For Experienced Users)
+1. **Jump to:** [Advanced Parametrized Project](03-hands-on-project.md)
+   - Complex infrastructure patterns
+   - Advanced Terraform features
+   - Production-ready implementations
 
 ---
 
@@ -103,6 +136,26 @@ variable "server_config" {
 }
 ```
 
+### Module Architecture
+```hcl
+# Simple module usage
+module "networking" {
+  source = "./modules/networking"
+  
+  project_name = var.project_name
+  vpc_cidr     = "10.0.0.0/16"
+}
+
+# Advanced module with complex inputs
+module "compute" {
+  source = "./modules/compute"
+  
+  vpc_id     = module.networking.vpc_id
+  subnet_ids = module.networking.subnet_ids
+  instances  = var.instance_configurations
+}
+```
+
 ### Dynamic Infrastructure Patterns
 ```hcl
 # for_each for named resources
@@ -124,25 +177,28 @@ resource "aws_cloudwatch_metric_alarm" "cpu" {
 }
 ```
 
-### Environment Management
-```hcl
-# dev.tfvars
-environment = "dev"
-instance_type = "t2.micro"
-monitoring_enabled = false
-
-# prod.tfvars  
-environment = "prod"
-instance_type = "t3.large"
-monitoring_enabled = true
-```
-
 ---
 
-## Hands-On Project Architecture
+## Hands-On Projects Overview
 
+### Simple Modular Demo
 ```
-Parametrized Infrastructure Demo:
+Simple Web Application:
+├── VPC with public subnet
+├── Security group for web access
+├── EC2 instance running web server
+└── Clean module separation
+```
+
+**Features:**
+- 3 focused modules (networking, security, compute)
+- Clear data flow between modules
+- Simple variable usage
+- Easy to understand and modify
+
+### Advanced Parametrized Infrastructure
+```
+Complex Infrastructure Demo:
 ├── VPC with configurable CIDR
 ├── Multiple public subnets (for_each loop)
 ├── EC2 instances from object list
@@ -151,14 +207,13 @@ Parametrized Infrastructure Demo:
 └── Dynamic security group rules
 ```
 
-### Project Features Demonstrated
-- **All Terraform data types** in practical use
-- **Dynamic loops** with count and for_each
-- **Conditional logic** for environment-specific resources
-- **Variable validation** with custom rules
-- **Complex expressions** using functions and interpolation
-- **Environment separation** using .tfvars files
-- **Advanced outputs** with for expressions
+**Features:**
+- All Terraform data types in practical use
+- Dynamic loops with count and for_each
+- Conditional logic for environment-specific resources
+- Variable validation with custom rules
+- Complex expressions using functions and interpolation
+- Environment separation using .tfvars files
 
 ---
 
@@ -172,10 +227,11 @@ Parametrized Infrastructure Demo:
 - [ ] Variable validation rules created
 - [ ] .tfvars files for environment separation
 - [ ] Terraform console used for testing
-- [ ] Complex infrastructure deployed successfully
+- [ ] Modules created and used effectively
 
 ### Practical Application
-- [ ] Parametrized VPC and EC2 infrastructure built
+- [ ] Simple modular project completed
+- [ ] Advanced parametrized infrastructure built
 - [ ] Environment-specific configurations implemented
 - [ ] Conditional resources based on environment
 - [ ] Advanced outputs with useful information
@@ -203,6 +259,7 @@ Parametrized Infrastructure Demo:
 - Complex data structure handling
 - Advanced Terraform functions usage
 - Conditional infrastructure deployment
+- Modular architecture design
 
 ---
 
@@ -222,6 +279,7 @@ After completing Day 2:
 - **Variable validation errors:** Check validation conditions and input values
 - **for_each errors:** Ensure you're using sets or maps, not lists directly
 - **Type conversion issues:** Use appropriate type conversion functions
+- **Module path errors:** Verify module source paths are correct
 - **Terraform console errors:** Verify variable references and syntax
 
 ### Best Practices Reinforced
@@ -231,6 +289,7 @@ After completing Day 2:
 - Test expressions in terraform console before using
 - Use appropriate loop constructs (count vs for_each)
 - Document complex expressions and logic
+- Start simple, then add complexity
 
 ---
 
@@ -240,6 +299,7 @@ After completing Day 2:
 - [Terraform Language Documentation](https://developer.hashicorp.com/terraform/language)
 - [Built-in Functions Reference](https://developer.hashicorp.com/terraform/language/functions)
 - [Variable and Type Constraints](https://developer.hashicorp.com/terraform/language/values/variables)
+- [Module Development](https://developer.hashicorp.com/terraform/language/modules/develop)
 
 ### Advanced Topics to Explore
 - Custom validation rules
@@ -250,6 +310,6 @@ After completing Day 2:
 
 ---
 
-**Ready to master advanced Terraform? Start with [Lecture Notes](01-lecture-notes.md)!**
+**Ready to master advanced Terraform? Start with [Lecture Notes](01-lecture-notes.md), then choose your learning path!**
 
-*This day transforms you from a Terraform beginner to someone who can build sophisticated, production-ready infrastructure as code.*
+*Day 2 transforms you from a Terraform beginner to someone who can build sophisticated, production-ready infrastructure as code.*
