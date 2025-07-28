@@ -470,7 +470,231 @@ resource "aws_backup_vault" "ec2_backup" {
 
 ---
 
-## Step 6: Functions and Expressions (10 minutes)
+## Step 6: Looping Concepts - Multiple EC2 Instances (15 minutes)
+
+Learn how to create multiple EC2 instances using count and for_each loops.
+
+### Using Count for Multiple Identical EC2 Instances
+
+```hcl
+# Variable for number of instances
+variable "instance_count" {
+  description = "Number of EC2 instances to create"
+  type        = number
+  default     = 2
+  
+  validation {
+    condition     = var.instance_count >= 1 && var.instance_count <= 10
+    error_message = "Instance count must be between 1 and 10."
+  }
+}
+
+# Create multiple EC2 instances using count
+resource "aws_instance" "web" {
+  count = var.instance_count
+  
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = local.current_config.instance_type
+  
+  vpc_security_group_ids = [aws_security_group.web.id]
+  
+  tags = {
+    Name        = "${var.instance_name}-${count.index + 1}"
+    Environment = var.environment
+    Index       = count.index
+  }
+}
+```
+
+### Using for_each for Named EC2 Instances
+
+```hcl
+# Variable for named instances
+variable "named_instances" {
+  description = "Map of named EC2 instances to create"
+  type = map(object({
+    instance_type = string
+    environment   = string
+  }))
+  default = {
+    "web-server" = {
+      instance_type = "t2.micro"
+      environment   = "dev"
+    }
+    "api-server" = {
+      instance_type = "t2.small"
+      environment   = "dev"
+    }
+  }
+}
+
+# Create named EC2 instances using for_each
+resource "aws_instance" "named" {
+  for_each = var.named_instances
+  
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = each.value.instance_type
+  
+  vpc_security_group_ids = [aws_security_group.web.id]
+  
+  tags = {
+    Name        = each.key
+    Environment = each.value.environment
+    Type        = "named-instance"
+  }
+}
+```
+
+### When to Use Count vs for_each
+
+- **Use count when:**
+  - Creating identical resources
+  - Need simple indexing (0, 1, 2...)
+  - Resources are interchangeable
+
+- **Use for_each when:**
+  - Creating named resources
+  - Each resource has different configuration
+  - Need to reference resources by key
+
+---
+
+## Step 7: Region-Specific AMI Selection (15 minutes)
+
+Implement logic to select different AMI IDs based on the deployment region.
+
+### AMI Mapping by Region
+
+```hcl
+# Variable for region-specific AMI mapping
+variable "region_amis" {
+  description = "AMI IDs for different regions"
+  type        = map(string)
+  default = {
+    "us-east-1"      = "ami-0c02fb55956c7d316"  # Amazon Linux 2 in us-east-1
+    "us-west-2"      = "ami-0892d3c7ee96c0bf7"  # Amazon Linux 2 in us-west-2
+    "eu-west-1"      = "ami-0a8e758f5e873d1c1"  # Amazon Linux 2 in eu-west-1
+    "ap-southeast-1" = "ami-0c802847a7dd848c0"  # Amazon Linux 2 in ap-southeast-1
+  }
+}
+
+# Local value to select AMI based on current region
+locals {
+  # Get current region
+  current_region = data.aws_region.current.name
+  
+  # Select AMI based on region, fallback to data source if not in map
+  selected_ami = lookup(var.region_amis, local.current_region, data.aws_ami.amazon_linux.id)
+  
+  # Alternative: Use conditional logic for AMI selection
+  conditional_ami = (
+    local.current_region == "us-east-1" ? "ami-0c02fb55956c7d316" :
+    local.current_region == "us-west-2" ? "ami-0892d3c7ee96c0bf7" :
+    local.current_region == "eu-west-1" ? "ami-0a8e758f5e873d1c1" :
+    data.aws_ami.amazon_linux.id  # fallback to latest
+  )
+}
+
+# Data source to get current region
+data "aws_region" "current" {}
+
+# Data source as fallback for unlisted regions
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
+  
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
+# EC2 instance using region-specific AMI
+resource "aws_instance" "web" {
+  count = var.instance_count
+  
+  ami           = local.selected_ami
+  instance_type = local.current_config.instance_type
+  
+  vpc_security_group_ids = [aws_security_group.web.id]
+  
+  tags = {
+    Name        = "${var.instance_name}-${count.index + 1}"
+    Environment = var.environment
+    Region      = local.current_region
+    AMI         = local.selected_ami
+  }
+}
+```
+
+### Advanced Region-AMI Logic with Validation
+
+```hcl
+# More sophisticated region-AMI mapping with OS types
+variable "ami_config" {
+  description = "AMI configuration by region and OS type"
+  type = map(object({
+    amazon_linux = string
+    ubuntu       = string
+    windows      = string
+  }))
+  default = {
+    "us-east-1" = {
+      amazon_linux = "ami-0c02fb55956c7d316"
+      ubuntu       = "ami-0a634ae95e11c6f91"
+      windows      = "ami-0c2a0ede9fd7cb37c"
+    }
+    "us-west-2" = {
+      amazon_linux = "ami-0892d3c7ee96c0bf7"
+      ubuntu       = "ami-0a634ae95e11c6f91"
+      windows      = "ami-0c2a0ede9fd7cb37c"
+    }
+  }
+}
+
+variable "os_type" {
+  description = "Operating system type"
+  type        = string
+  default     = "amazon_linux"
+  
+  validation {
+    condition     = contains(["amazon_linux", "ubuntu", "windows"], var.os_type)
+    error_message = "OS type must be amazon_linux, ubuntu, or windows."
+  }
+}
+
+# Local logic for AMI selection
+locals {
+  # Check if current region is supported
+  region_supported = contains(keys(var.ami_config), local.current_region)
+  
+  # Select AMI based on region and OS type
+  selected_ami_advanced = (
+    local.region_supported ?
+    var.ami_config[local.current_region][var.os_type] :
+    data.aws_ami.fallback.id
+  )
+}
+
+# Fallback data source for unsupported regions
+data "aws_ami" "fallback" {
+  most_recent = true
+  owners      = ["amazon"]
+  
+  filter {
+    name = "name"
+    values = [
+      var.os_type == "amazon_linux" ? "amzn2-ami-hvm-*-x86_64-gp2" :
+      var.os_type == "ubuntu" ? "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*" :
+      "Windows_Server-2019-English-Full-Base-*"
+    ]
+  }
+}
+```
+
+---
+
+## Step 8: Functions and Expressions (10 minutes)
 
 Use Terraform functions to make EC2 configuration more dynamic.
 
@@ -494,27 +718,30 @@ locals {
   
   # Network functions (for advanced scenarios)
   subnet_cidrs = [for i in range(3) : cidrsubnet("10.0.0.0/16", 8, i)]
+  
+  # Loop with conditions for instance naming
+  instance_names = [for i in range(var.instance_count) : "${var.instance_name}-${format("%02d", i + 1)}"]
 }
 
 # Using functions in resource configuration
 resource "aws_instance" "web" {
-  count = local.current_config.instance_count
+  count = var.instance_count
   
-  ami           = data.aws_ami.amazon_linux.id
+  ami           = local.selected_ami
   instance_type = local.current_config.instance_type
   
   tags = {
-    Name         = "${local.instance_name_clean}-${var.environment}-${format("%02d", count.index + 1)}"
+    Name         = local.instance_names[count.index]
     Environment  = upper(var.environment)
     DeployedOn   = local.deployment_date
-    InstanceNum  = "${count.index + 1} of ${local.current_config.instance_count}"
+    InstanceNum  = "${count.index + 1} of ${var.instance_count}"
   }
 }
 ```
 
 ---
 
-## Step 7: .tfvars Files - Environment-Specific EC2 Deployments (15 minutes)
+## Step 9: .tfvars Files - Environment-Specific EC2 Deployments (15 minutes)
 
 Create environment-specific configuration files for our EC2 infrastructure.
 
@@ -526,9 +753,10 @@ environment   = "dev"
 instance_name = "dev-web-server"
 
 # Development-specific settings
-instance_count   = 1
+instance_count   = 2
 enable_monitoring = false
 allowed_ports    = [80, 22, 8080]  # Extra port for development
+os_type          = "amazon_linux"
 
 # Development EC2 configuration
 ec2_config = {
@@ -543,19 +771,32 @@ instance_types = {
   staging = "t2.small"
   prod    = "t3.medium"
 }
+
+# Named instances for development
+named_instances = {
+  "dev-web" = {
+    instance_type = "t2.micro"
+    environment   = "dev"
+  }
+  "dev-api" = {
+    instance_type = "t2.micro"
+    environment   = "dev"
+  }
+}
 ```
 
 ### staging.tfvars
 ```hcl
 # Staging environment configuration
-region        = "us-east-1"
+region        = "us-west-2"  # Different region
 environment   = "staging"
 instance_name = "staging-web-server"
 
 # Staging-specific settings
-instance_count   = 2
+instance_count   = 3
 enable_monitoring = true
 allowed_ports    = [80, 443, 22]
+os_type          = "ubuntu"
 
 # Staging EC2 configuration
 ec2_config = {
@@ -570,38 +811,75 @@ instance_types = {
   staging = "t2.small"
   prod    = "t3.medium"
 }
+
+# Named instances for staging
+named_instances = {
+  "staging-web-01" = {
+    instance_type = "t2.small"
+    environment   = "staging"
+  }
+  "staging-web-02" = {
+    instance_type = "t2.small"
+    environment   = "staging"
+  }
+  "staging-api" = {
+    instance_type = "t2.medium"
+    environment   = "staging"
+  }
+}
 ```
 
 ### prod.tfvars
 ```hcl
 # Production environment configuration
-region        = "us-west-2"  # Different region for prod
+region        = "eu-west-1"  # Different region for prod
 environment   = "prod"
 instance_name = "prod-web-server"
 
 # Production-specific settings
-instance_count   = 3
+instance_count   = 5
 enable_monitoring = true
 allowed_ports    = [80, 443]  # Only necessary ports
+os_type          = "amazon_linux"
 
 # Production EC2 configuration
 ec2_config = {
-  instance_type   = "t3.medium"
+  instance_type   = "t3.large"
   monitoring      = true
   backup_required = true
-  storage_size    = 32
+  storage_size    = 50
 }
 
 instance_types = {
   dev     = "t2.micro"
   staging = "t2.small"
-  prod    = "t3.medium"
+  prod    = "t3.large"
+}
+
+# Named instances for production
+named_instances = {
+  "prod-web-01" = {
+    instance_type = "t3.large"
+    environment   = "prod"
+  }
+  "prod-web-02" = {
+    instance_type = "t3.large"
+    environment   = "prod"
+  }
+  "prod-api-01" = {
+    instance_type = "t3.xlarge"
+    environment   = "prod"
+  }
+  "prod-api-02" = {
+    instance_type = "t3.xlarge"
+    environment   = "prod"
+  }
 }
 ```
 
 ---
 
-## Step 8: Terraform Console - Testing EC2 Expressions (10 minutes)
+## Step 10: Terraform Console - Testing EC2 Expressions (10 minutes)
 
 Use Terraform console to test expressions before applying them.
 
@@ -641,11 +919,30 @@ terraform console
 # Test conditional logic
 > var.environment == "prod" ? 3 : 1
 1
+
+# Test region-specific AMI selection
+> lookup(var.region_amis, "us-east-1", "default-ami")
+"ami-0c02fb55956c7d316"
+
+# Test looping with range
+> [for i in range(3) : "instance-${i + 1}"]
+[
+  "instance-1",
+  "instance-2",
+  "instance-3"
+]
+
+# Test for_each keys
+> keys(var.named_instances)
+[
+  "api-server",
+  "web-server"
+]
 ```
 
 ---
 
-## Step 9: Deployment with Different Configurations (10 minutes)
+## Step 11: Deployment with Different Configurations (10 minutes)
 
 Deploy the same EC2 infrastructure with different configurations.
 
@@ -680,16 +977,18 @@ terraform apply -var-file="staging.tfvars"
 terraform plan -var-file="prod.tfvars"
 
 # Notice the differences:
-# - Different region
-# - More instances
-# - Larger instance types
-# - Additional monitoring
-# - Backup enabled
+# - Different region (eu-west-1 vs us-east-1)
+# - Different AMI (region-specific)
+# - More instances (5 vs 2)
+# - Larger instance types (t3.large vs t2.micro)
+# - Different OS type (varies by environment)
+# - Named instances with different configurations
+# - Additional monitoring and backup
 ```
 
 ---
 
-## Step 10: Variable Precedence Testing (10 minutes)
+## Step 12: Variable Precedence Testing (10 minutes)
 
 Understand how Terraform resolves variable values.
 
@@ -726,10 +1025,12 @@ unset TF_VAR_instance_type
 3. **Validation** → Safe input values
 4. **Data Types** → Complex configurations (lists, maps, objects)
 5. **Conditionals** → Environment-specific behavior
-6. **Functions** → Dynamic value computation
-7. **.tfvars** → Environment separation
-8. **Console** → Expression testing
-9. **Precedence** → Variable resolution understanding
+6. **Looping** → Multiple instances with count and for_each
+7. **Region-AMI Logic** → Dynamic AMI selection based on region
+8. **Functions** → Dynamic value computation
+9. **.tfvars** → Environment separation
+10. **Console** → Expression testing
+11. **Precedence** → Variable resolution understanding
 
 ### Production-Ready Patterns Achieved
 
