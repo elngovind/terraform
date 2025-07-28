@@ -3,7 +3,7 @@
 
 ---
 
-## #### Today's Learning Objectives
+## 
 
 By the end of this session, you will:
 - Build a complete AWS infrastructure with VPC, EC2, and ASG
@@ -14,39 +14,39 @@ By the end of this session, you will:
 
 ---
 
-## ####ã What We're Building Today
+## 
 
 ```
 AWS Infrastructure Architecture:
-##ú###### VPC (Virtual Private Cloud)
-##ú###### Public & Private Subnets (Multi-AZ)
-##ú###### Internet Gateway & Route Tables
-##ú###### Security Groups
-##ú###### Launch Template
-##ú###### Auto Scaling Group
-##ú###### Application Load Balancer
-########## Outputs for integration
+##ú## ## VPC (Virtual Private Cloud)
+##ú## ## Public & Private Subnets (Multi-AZ)
+##ú## ## Internet Gateway & Route Tables
+##ú## ## Security Groups
+##ú## ## Launch Template
+##ú## ## Auto Scaling Group
+##ú## ## Application Load Balancer
+## ## ## Outputs for integration
 ```
 
 ---
 
-## ######## Step-by-Step Implementation
+## ## 
 
 ### Step 1: Project Structure Setup
 
 ```bash
 terraform-infrastructure/
-##ú###### main.tf              # Main configuration
-##ú###### variables.tf         # Input variables
-##ú###### outputs.tf           # Output values
-##ú###### terraform.tfvars     # Variable values
-##ú###### modules/             # Reusable modules
-##Ç   ##ú###### vpc/
-##Ç   ##ú###### security/
-##Ç   ########## compute/
-########## environments/        # Environment configs
-    ##ú###### dev.tfvars
-    ########## prod.tfvars
+##ú## ## main.tf              # Main configuration
+##ú## ## variables.tf         # Input variables
+##ú## ## outputs.tf           # Output values
+##ú## ## terraform.tfvars     # Variable values
+##ú## ## modules/             # Reusable modules
+##Ç   ##ú## ## vpc/
+##Ç   ##ú## ## security/
+##Ç   ## ## ## compute/
+## ## ## environments/        # Environment configs
+    ##ú## ## dev.tfvars
+    ## ## ## prod.tfvars
 ```
 
 ---
@@ -135,7 +135,7 @@ variable "common_tags" {
 }
 ```
 
-**####ç Key Learning Points:**
+**## 
 - **Validation blocks** ensure input correctness
 - **Type constraints** prevent configuration errors
 - **Default values** provide sensible fallbacks
@@ -248,7 +248,7 @@ resource "aws_route_table_association" "public" {
 }
 ```
 
-**####ç Key Learning Points:**
+**## 
 - **Data sources** fetch existing AWS resources
 - **Count parameter** creates multiple similar resources
 - **Merge function** combines tag maps
@@ -334,7 +334,7 @@ resource "aws_security_group" "web" {
 }
 ```
 
-**####ç Key Learning Points:**
+**## 
 - **name_prefix** avoids naming conflicts
 - **Security group references** create dependencies
 - **Lifecycle rules** control resource creation/destruction order
@@ -454,7 +454,7 @@ resource "aws_autoscaling_group" "web" {
 }
 ```
 
-**####ç Key Learning Points:**
+**## 
 - **templatefile function** processes external files
 - **Dynamic blocks** create repeated configurations
 - **Splat expressions** (`[*]`) extract attributes from lists
@@ -487,7 +487,7 @@ cat <<EOF > /var/www/html/index.html
 <body>
     <div class="container">
         <div class="header">
-            <h1>#### ${project_name}</h1>
+            <h1>## 
             <p>Environment: ${environment}</p>
         </div>
         <div class="content">
@@ -565,7 +565,7 @@ output "launch_template_id" {
 }
 ```
 
-**####ç Key Learning Points:**
+**## 
 - **Descriptive outputs** help with integration
 - **Sensitive flag** protects confidential data
 - **Complex output structures** organize related data
@@ -619,7 +619,7 @@ common_tags = {
 
 ---
 
-## #### Advanced Terraform Features
+## 
 
 ### 1. Local Values for Complex Logic
 
@@ -702,7 +702,7 @@ resource "aws_security_group" "custom" {
 
 ---
 
-## #### Modular Architecture
+## 
 
 ### VPC Module Structure
 
@@ -782,7 +782,7 @@ module "compute" {
 
 ---
 
-## #### Execution Commands
+## 
 
 ```bash
 # Initialize Terraform
@@ -815,7 +815,7 @@ terraform destroy -var-file="dev.tfvars" -auto-approve
 
 ---
 
-## ####ß Best Practices Implemented
+## 
 
 ### 1. **Security**
 - Security groups with minimal required access
@@ -844,7 +844,7 @@ terraform destroy -var-file="dev.tfvars" -auto-approve
 
 ---
 
-## #### Key Takeaways
+## 
 
 ### Variables & Parameters
 - **Input validation** prevents configuration errors
@@ -870,7 +870,7 @@ terraform destroy -var-file="dev.tfvars" -auto-approve
 
 ---
 
-## #### Next Steps
+## 
 
 1. **Implement monitoring** with CloudWatch alarms
 2. **Add CI/CD pipeline** for automated deployments
@@ -880,7 +880,7 @@ terraform destroy -var-file="dev.tfvars" -auto-approve
 
 ---
 
-## #### Additional Resources
+## 
 
 - [Terraform AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 - [Terraform Best Practices](https://www.terraform.io/docs/cloud/guides/recommended-practices/index.html)
@@ -888,4 +888,4 @@ terraform destroy -var-file="dev.tfvars" -auto-approve
 
 ---
 
-**####â Congratulations!** You now have a production-ready, scalable, and maintainable infrastructure setup using Terraform best practices!
+**## 

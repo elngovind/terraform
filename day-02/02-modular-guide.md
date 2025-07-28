@@ -3,7 +3,7 @@
 
 ---
 
-## #### Today's Mission: Build a Complete E-Commerce Platform Infrastructure
+## 
 
 **What we're building:** A scalable, secure, and production-ready infrastructure for an e-commerce application with:
 - Multi-tier architecture (Web, App, Database)
@@ -15,82 +15,82 @@
 
 ---
 
-## ######## Architecture Overview
+## ## 
 
 ```
 Production E-Commerce Infrastructure:
-##ú###### #### Public Tier (Load Balancers)
-##ú###### ########  Web Tier (Frontend Servers)
-##ú###### ######  Application Tier (Backend APIs)
-##ú###### ########  Database Tier (RDS with replicas)
-##ú###### #### Monitoring (CloudWatch, SNS)
-########## #### Security (WAF, Security Groups)
+##ú## ## 
+##ú## ## ## 
+##ú## ## ##  Application Tier (Backend APIs)
+##ú## ## ## 
+##ú## ## 
+## ## ## 
 ```
 
 ---
 
-## #### Project Structure (Modular Approach)
+## 
 
 ```bash
 ecommerce-infrastructure/
-##ú###### main.tf                    # Root module orchestration
-##ú###### variables.tf               # Root variables
-##ú###### outputs.tf                 # Root outputs
-##ú###### terraform.tfvars          # Default values
-##ú###### locals.tf                 # Local computations
-##ú###### data.tf                   # Data sources
-##ú###### versions.tf               # Provider versions
-##ú###### 
-##ú###### modules/                  # Reusable modules
-##Ç   ##ú###### networking/           # VPC, Subnets, Routes
-##Ç   ##Ç   ##ú###### main.tf
-##Ç   ##Ç   ##ú###### variables.tf
-##Ç   ##Ç   ##ú###### outputs.tf
-##Ç   ##Ç   ########## README.md
+##ú## ## main.tf                    # Root module orchestration
+##ú## ## variables.tf               # Root variables
+##ú## ## outputs.tf                 # Root outputs
+##ú## ## terraform.tfvars          # Default values
+##ú## ## locals.tf                 # Local computations
+##ú## ## data.tf                   # Data sources
+##ú## ## versions.tf               # Provider versions
+##ú## ## 
+##ú## ## modules/                  # Reusable modules
+##Ç   ##ú## ## networking/           # VPC, Subnets, Routes
+##Ç   ##Ç   ##ú## ## main.tf
+##Ç   ##Ç   ##ú## ## variables.tf
+##Ç   ##Ç   ##ú## ## outputs.tf
+##Ç   ##Ç   ## ## ## README.md
 ##Ç   ##Ç
-##Ç   ##ú###### security/             # Security Groups, NACLs
-##Ç   ##Ç   ##ú###### main.tf
-##Ç   ##Ç   ##ú###### variables.tf
-##Ç   ##Ç   ########## outputs.tf
+##Ç   ##ú## ## security/             # Security Groups, NACLs
+##Ç   ##Ç   ##ú## ## main.tf
+##Ç   ##Ç   ##ú## ## variables.tf
+##Ç   ##Ç   ## ## ## outputs.tf
 ##Ç   ##Ç
-##Ç   ##ú###### compute/              # EC2, ASG, Launch Templates
-##Ç   ##Ç   ##ú###### main.tf
-##Ç   ##Ç   ##ú###### variables.tf
-##Ç   ##Ç   ##ú###### outputs.tf
-##Ç   ##Ç   ########## user_data/
-##Ç   ##Ç       ##ú###### web_server.sh
-##Ç   ##Ç       ########## app_server.sh
+##Ç   ##ú## ## compute/              # EC2, ASG, Launch Templates
+##Ç   ##Ç   ##ú## ## main.tf
+##Ç   ##Ç   ##ú## ## variables.tf
+##Ç   ##Ç   ##ú## ## outputs.tf
+##Ç   ##Ç   ## ## ## user_data/
+##Ç   ##Ç       ##ú## ## web_server.sh
+##Ç   ##Ç       ## ## ## app_server.sh
 ##Ç   ##Ç
-##Ç   ##ú###### database/             # RDS, Parameter Groups
-##Ç   ##Ç   ##ú###### main.tf
-##Ç   ##Ç   ##ú###### variables.tf
-##Ç   ##Ç   ########## outputs.tf
+##Ç   ##ú## ## database/             # RDS, Parameter Groups
+##Ç   ##Ç   ##ú## ## main.tf
+##Ç   ##Ç   ##ú## ## variables.tf
+##Ç   ##Ç   ## ## ## outputs.tf
 ##Ç   ##Ç
-##Ç   ##ú###### loadbalancer/         # ALB, Target Groups
-##Ç   ##Ç   ##ú###### main.tf
-##Ç   ##Ç   ##ú###### variables.tf
-##Ç   ##Ç   ########## outputs.tf
+##Ç   ##ú## ## loadbalancer/         # ALB, Target Groups
+##Ç   ##Ç   ##ú## ## main.tf
+##Ç   ##Ç   ##ú## ## variables.tf
+##Ç   ##Ç   ## ## ## outputs.tf
 ##Ç   ##Ç
-##Ç   ########## monitoring/           # CloudWatch, SNS
-##Ç       ##ú###### main.tf
-##Ç       ##ú###### variables.tf
-##Ç       ########## outputs.tf
+##Ç   ## ## ## monitoring/           # CloudWatch, SNS
+##Ç       ##ú## ## main.tf
+##Ç       ##ú## ## variables.tf
+##Ç       ## ## ## outputs.tf
 ##Ç
-########## environments/             # Environment-specific configs
-    ##ú###### dev/
-    ##Ç   ##ú###### terraform.tfvars
-    ##Ç   ########## backend.tf
-    ##ú###### staging/
-    ##Ç   ##ú###### terraform.tfvars
-    ##Ç   ########## backend.tf
-    ########## prod/
-        ##ú###### terraform.tfvars
-        ########## backend.tf
+## ## ## environments/             # Environment-specific configs
+    ##ú## ## dev/
+    ##Ç   ##ú## ## terraform.tfvars
+    ##Ç   ## ## ## backend.tf
+    ##ú## ## staging/
+    ##Ç   ##ú## ## terraform.tfvars
+    ##Ç   ## ## ## backend.tf
+    ## ## ## prod/
+        ##ú## ## terraform.tfvars
+        ## ## ## backend.tf
 ```
 
 ---
 
-## #### Step 1: Root Configuration Setup
+## 
 
 ### versions.tf - Provider Requirements
 ```hcl
@@ -308,7 +308,7 @@ variable "enable_read_replica" {
 
 ---
 
-## #### Step 2: Networking Module
+## 
 
 ### modules/networking/variables.tf
 ```hcl
@@ -564,7 +564,7 @@ output "public_route_table_id" {
 
 ---
 
-## #### Step 3: Security Module
+## 
 
 ### modules/security/variables.tf
 ```hcl
@@ -778,7 +778,7 @@ output "db_security_group_id" {
 
 ---
 
-## ####æ Step 4: Database Module
+## 
 
 ### modules/database/variables.tf
 ```hcl
@@ -1017,7 +1017,7 @@ output "read_replica_endpoint" {
 
 ---
 
-## ######## Step 5: Compute Module
+## ## 
 
 ### modules/compute/variables.tf
 ```hcl
@@ -1186,11 +1186,11 @@ cat <<'EOF' > /var/www/html/index.php
         
         <div class="info-grid">
             <div class="info-card">
-                <h3>######## Server Info</h3>
+                <h3>## ## 
                 <p><strong>Instance ID:</strong><br><?php echo file_get_contents('http://169.254.169.254/latest/meta-data/instance-id'); ?></p>
             </div>
             <div class="info-card">
-                <h3>####ç Location</h3>
+                <h3>## 
                 <p><strong>Availability Zone:</strong><br><?php echo file_get_contents('http://169.254.169.254/latest/meta-data/placement/availability-zone'); ?></p>
             </div>
             <div class="info-card">
@@ -1411,7 +1411,7 @@ output "app_launch_template_id" {
 
 ---
 
-## ###### Step 6: Load Balancer Module
+## ## Step 6: Load Balancer Module
 
 ### modules/loadbalancer/main.tf
 ```hcl
@@ -1475,7 +1475,7 @@ resource "aws_autoscaling_attachment" "web" {
 
 ---
 
-## #### Step 7: Main Configuration (Orchestration)
+## 
 
 ### main.tf
 ```hcl
@@ -1551,7 +1551,7 @@ module "loadbalancer" {
 
 ---
 
-## #### Step 8: Comprehensive Outputs
+## 
 
 ### outputs.tf
 ```hcl
@@ -1628,7 +1628,7 @@ output "environment_summary" {
 
 ---
 
-## ####ç Step 9: Environment Configurations
+## 
 
 ### environments/dev/terraform.tfvars
 ```hcl
@@ -1693,7 +1693,7 @@ common_tags = {
 
 ---
 
-## #### Deployment Commands
+## 
 
 ```bash
 # Initialize Terraform
@@ -1724,7 +1724,7 @@ terraform destroy -var-file="environments/dev/terraform.tfvars" -auto-approve
 
 ---
 
-## #### Key Learning Outcomes
+## 
 
 ### 1. **Modular Architecture Benefits**
 - **Reusability**: Modules can be used across environments
@@ -1751,7 +1751,7 @@ terraform destroy -var-file="environments/dev/terraform.tfvars" -auto-approve
 
 ---
 
-## ####ß Advanced Features Demonstrated
+## 
 
 ### 1. **Dynamic Resource Creation**
 ```hcl
@@ -1790,7 +1790,7 @@ depends_on = [aws_internet_gateway.main]
 
 ---
 
-## #### Production Readiness Checklist
+## 
 
 - **Multi-AZ Deployment**: High availability across zones
 - **Auto Scaling**: Dynamic capacity management
@@ -1805,7 +1805,7 @@ depends_on = [aws_internet_gateway.main]
 
 ---
 
-## #### Next Steps & Advanced Topics
+## 
 
 1. **State Management**: Remote backends with S3 + DynamoDB
 2. **CI/CD Integration**: GitLab/GitHub Actions pipelines
@@ -1818,4 +1818,4 @@ depends_on = [aws_internet_gateway.main]
 
 ---
 
-**####â Congratulations!** You've built a production-ready, scalable, and maintainable infrastructure using Terraform best practices. This modular approach will serve as a foundation for complex enterprise deployments.
+**## 

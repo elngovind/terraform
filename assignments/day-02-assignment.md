@@ -28,24 +28,24 @@ You're tasked with creating infrastructure for a blog platform that needs:
 
 Create the following modules:
 
-#### A. Networking Module (`modules/networking/`)
+## 
 - VPC with public and private subnets
 - Internet Gateway and NAT Gateway
 - Route tables and associations
 - Network ACLs
 
-#### B. Security Module (`modules/security/`)
+## 
 - Security groups for web, app, and database tiers
 - IAM roles and policies
 - Key pair management
 
-#### C. Compute Module (`modules/compute/`)
+## 
 - Launch template for web servers
 - Auto Scaling Group
 - Application Load Balancer
 - Target groups and health checks
 
-#### D. Database Module (`modules/database/`)
+## 
 - RDS instance with Multi-AZ
 - Database subnet group
 - Parameter group
@@ -61,13 +61,13 @@ Create the following modules:
 
 Create environment-specific configurations:
 
-#### Development Environment
+## 
 - Single AZ deployment
 - t3.micro instances
 - db.t3.micro database
 - Minimal monitoring
 
-#### Production Environment
+## 
 - Multi-AZ deployment
 - t3.medium instances
 - db.r5.large database

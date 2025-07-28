@@ -3,7 +3,7 @@
 
 ---
 
-## **Slide 1: Welcome & Agenda**
+## Slide 1: Welcome & Agenda
 **Time: 0-5 minutes**
 
 ### Terraform Day 01 - Infrastructure as Code
@@ -21,7 +21,7 @@
 
 ---
 
-## **Slide 2: Manual Deployment Challenges**
+## Slide 2: Manual Deployment Challenges
 **Time: 5-20 minutes**
 
 ### The Old Way: Manual Infrastructure
@@ -40,7 +40,7 @@
 
 ---
 
-## **Slide 3: How Infrastructure Management Evolved**
+## Slide 3: How Infrastructure Management Evolved
 **Time: 20-40 minutes**
 
 ### Evolution Timeline
@@ -59,7 +59,7 @@ Manual Scripts ##†## Configuration Management ##†## Infrastructure as Code
 
 ---
 
-## **Slide 4: Types of IaC Tools Overview**
+## Slide 4: Types of IaC Tools Overview
 **Time: 40-65 minutes**
 
 ### Three Categories of IaC Tools
@@ -82,7 +82,7 @@ Manual Scripts ##†## Configuration Management ##†## Infrastructure as Code
 
 ---
 
-## **Slide 5: Configuration Management Deep Dive**
+## Slide 5: Configuration Management Deep Dive
 **Time: 65-75 minutes**
 
 ### Configuration Management Tools
@@ -107,7 +107,7 @@ Manual Scripts ##†## Configuration Management ##†## Infrastructure as Code
 
 ---
 
-## **Slide 6: Server Templating Tools**
+## Slide 6: Server Templating Tools
 **Time: 75-85 minutes**
 
 ### Server Templating Philosophy
@@ -132,7 +132,7 @@ Immutable: Image ##†## Deploy ##†## Replace ##†## Deploy New Image
 
 ---
 
-## **Slide 7: Provisioning Tools**
+## Slide 7: Provisioning Tools
 **Time: 85-95 minutes**
 
 ### Provisioning Tools Purpose
@@ -151,11 +151,11 @@ Immutable: Image ##†## Deploy ##†## Replace ##†## Deploy New Image
 
 ---
 
-## **BREAK: 10 Minutes (95-105)**
+## BREAK: 10 Minutes (95-105)
 
 ---
 
-## **Slide 8: Why Terraform?**
+## Slide 8: Why Terraform?
 **Time: 105-125 minutes**
 
 ### Terraform's Unique Advantages
@@ -181,7 +181,7 @@ Immutable: Image ##†## Deploy ##†## Replace ##†## Deploy New Image
 
 ---
 
-## **Slide 9: Terraform Providers**
+## Slide 9: Terraform Providers
 **Time: 125-130 minutes**
 
 ### Popular Terraform Providers
@@ -204,7 +204,7 @@ Networking:        Databases:         Version Control:
 
 ---
 
-## **Slide 10: Terraform Core Concepts**
+## Slide 10: Terraform Core Concepts
 **Time: 130-140 minutes**
 
 ### Declarative Approach
@@ -237,7 +237,7 @@ main.tf ##†## Preview ##†## Deploy
 
 ---
 
-## **Slide 11: Terraform State Management**
+## Slide 11: Terraform State Management
 **Time: 140-145 minutes**
 
 ### Terraform State (terraform.tfstate)
@@ -261,7 +261,7 @@ terraform import aws_instance.webserver i-1234567890abcdef0
 
 ---
 
-## **Slide 12: HCL Basics - First Resource**
+## Slide 12: HCL Basics - First Resource
 **Time: 145-150 minutes**
 
 ### HashiCorp Configuration Language (HCL)
@@ -283,8 +283,8 @@ resource_type = file
 resource_name = pet
 
 Arguments:
-##œ###### filename = "/root/pets.txt"
-########## content = "We love pets!"
+##œ## ## filename = "/root/pets.txt"
+## ## ## content = "We love pets!"
 ```
 
 ### Resource Documentation
@@ -292,7 +292,7 @@ Arguments:
 
 ---
 
-## **Slide 13: Terraform Installation & Next Steps**
+## Slide 13: Terraform Installation & Next Steps
 **Time: 150 minutes - Wrap Up**
 
 ### Installation Options
@@ -313,7 +313,7 @@ Arguments:
 
 ---
 
-## **Lecture Notes for Instructor**
+## Lecture Notes for Instructor
 
 ### Timing Breakdown (150 minutes total)
 - **Introduction & Manual Challenges:** 20 minutes

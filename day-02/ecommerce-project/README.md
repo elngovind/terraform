@@ -9,12 +9,12 @@ This project demonstrates a complete e-commerce platform infrastructure using Te
 
 ```
 Production E-Commerce Infrastructure:
-##œ###### Public Tier (Load Balancers)
-##œ###### Web Tier (Frontend Servers)
-##œ###### Application Tier (Backend APIs)
-##œ###### Database Tier (RDS with replicas)
-##œ###### Monitoring (CloudWatch, SNS)
-########## Security (WAF, Security Groups)
+##œ## ## Public Tier (Load Balancers)
+##œ## ## Web Tier (Frontend Servers)
+##œ## ## Application Tier (Backend APIs)
+##œ## ## Database Tier (RDS with replicas)
+##œ## ## Monitoring (CloudWatch, SNS)
+## ## ## Security (WAF, Security Groups)
 ```
 
 ---
@@ -23,26 +23,26 @@ Production E-Commerce Infrastructure:
 
 ```
 ecommerce-infrastructure/
-##œ###### main.tf                    # Root module orchestration
-##œ###### variables.tf               # Input variables
-##œ###### outputs.tf                 # Root outputs
-##œ###### locals.tf                 # Computed values
-##œ###### data.tf                   # Data sources
-##œ###### versions.tf               # Provider versions
-##œ###### terraform.tfvars          # Default values
-##œ###### 
-##œ###### modules/                  # Reusable modules
-##‚   ##œ###### networking/           # VPC, Subnets
-##‚   ##œ###### security/             # Security Groups
-##‚   ##œ###### compute/              # EC2, ASG
-##‚   ##œ###### database/             # RDS
-##‚   ##œ###### loadbalancer/         # ALB
-##‚   ########## monitoring/           # CloudWatch
+##œ## ## main.tf                    # Root module orchestration
+##œ## ## variables.tf               # Input variables
+##œ## ## outputs.tf                 # Root outputs
+##œ## ## locals.tf                 # Computed values
+##œ## ## data.tf                   # Data sources
+##œ## ## versions.tf               # Provider versions
+##œ## ## terraform.tfvars          # Default values
+##œ## ## 
+##œ## ## modules/                  # Reusable modules
+##‚   ##œ## ## networking/           # VPC, Subnets
+##‚   ##œ## ## security/             # Security Groups
+##‚   ##œ## ## compute/              # EC2, ASG
+##‚   ##œ## ## database/             # RDS
+##‚   ##œ## ## loadbalancer/         # ALB
+##‚   ## ## ## monitoring/           # CloudWatch
 ##‚
-########## environments/             # Environment configs
-    ##œ###### dev/
-    ##œ###### staging/
-    ########## prod/
+## ## ## environments/             # Environment configs
+    ##œ## ## dev/
+    ##œ## ## staging/
+    ## ## ## prod/
 ```
 
 ---
