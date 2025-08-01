@@ -237,21 +237,22 @@ cat main.tf
 BUCKET_NAME=$(terraform output -raw s3_bucket_name)
 echo "Bucket name: $BUCKET_NAME"
 
-# Show students they need to update main.tf with this bucket name
-echo "Update the backend configuration in main.tf with: $BUCKET_NAME"
+# Update main.tf with actual bucket name
+sed -i "s/terraform-state-demo-12345678/$BUCKET_NAME/g" main.tf
+
+# Verify the update
+grep "bucket.*=" main.tf
 ```
 
-**Manual step - show students how to edit:**
-```hcl
-terraform {
-  backend "s3" {
-    bucket         = "terraform-state-demo-a1b2c3d4"  # Use actual bucket name
-    key            = "remote-state-demo/terraform.tfstate"
-    region         = "us-west-2"
-    encrypt        = true
-    dynamodb_table = "terraform-state-locks"
-  }
-}
+**Rename infrastructure files to avoid conflicts:**
+```bash
+# Move infrastructure files
+mv main-infrastructure.tf main-infra.tf
+mv infrastructure-variables.tf infra-vars.tf  
+mv infrastructure-outputs.tf infra-outputs.tf
+
+# List files to confirm
+ls -la *.tf
 ```
 
 ### Phase 3: Initialize Remote Backend

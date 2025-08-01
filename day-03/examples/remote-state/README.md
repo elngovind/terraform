@@ -37,33 +37,29 @@ terraform apply
 # Get the bucket name and other details
 terraform output backend_configuration
 
-# Example output:
-# {
-#   "bucket" = "terraform-state-demo-a1b2c3d4"
-#   "dynamodb_table" = "terraform-state-locks"
-#   "encrypt" = true
-#   "key" = "terraform.tfstate"
-#   "region" = "us-west-2"
-# }
+# Get specific bucket name
+BUCKET_NAME=$(terraform output -raw s3_bucket_name)
+echo "Your bucket name: $BUCKET_NAME"
 ```
 
 ### Phase 2: Configure Remote State
 
 #### Step 3: Update Backend Configuration
 Edit `main.tf` and update the backend configuration with your actual bucket name:
-```hcl
-terraform {
-  backend "s3" {
-    bucket         = "terraform-state-demo-a1b2c3d4"  # Your actual bucket name
-    key            = "remote-state-demo/terraform.tfstate"
-    region         = "us-west-2"
-    encrypt        = true
-    dynamodb_table = "terraform-state-locks"
-  }
-}
+```bash
+# Replace the placeholder bucket name with your actual bucket
+sed -i "s/terraform-state-demo-12345678/$BUCKET_NAME/g" main.tf
 ```
 
-#### Step 4: Initialize Remote Backend
+#### Step 4: Move Infrastructure Files
+```bash
+# Move infrastructure files to avoid conflicts
+mv main-infrastructure.tf main-infra.tf
+mv infrastructure-variables.tf infra-vars.tf
+mv infrastructure-outputs.tf infra-outputs.tf
+```
+
+#### Step 5: Initialize Remote Backend
 ```bash
 # Initialize with remote backend
 terraform init
@@ -73,7 +69,7 @@ terraform init
 
 ### Phase 3: Deploy Infrastructure
 
-#### Step 5: Plan and Apply
+#### Step 6: Plan and Apply
 ```bash
 # Plan infrastructure
 terraform plan
@@ -82,7 +78,7 @@ terraform plan
 terraform apply
 ```
 
-#### Step 6: Verify Remote State
+#### Step 7: Verify Remote State
 ```bash
 # Check that no local state file exists
 ls -la terraform.tfstate*

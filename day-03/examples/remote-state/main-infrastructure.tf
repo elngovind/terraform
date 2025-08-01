@@ -1,19 +1,5 @@
-# Remote State Example - EC2 with S3 Backend
-# This demonstrates remote state management with S3 and DynamoDB
-
-terraform {
-  required_version = ">= 1.0"
-  
-  # Remote backend configuration
-  # Replace bucket name with your actual bucket from backend-setup
-  backend "s3" {
-    bucket         = "terraform-state-demo-12345678"  # Update this!
-    key            = "remote-state-demo/terraform.tfstate"
-    region         = "us-west-2"
-    encrypt        = true
-    dynamodb_table = "terraform-state-locks"
-  }
-}
+# Main Infrastructure Configuration
+# This file contains the actual infrastructure resources
 
 # Data source for latest Amazon Linux AMI
 data "aws_ami" "amazon_linux" {
