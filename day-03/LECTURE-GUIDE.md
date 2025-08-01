@@ -244,12 +244,10 @@ sed -i "s/terraform-state-demo-12345678/$BUCKET_NAME/g" main.tf
 grep "bucket.*=" main.tf
 ```
 
-**Rename infrastructure files to avoid conflicts:**
+**Rename infrastructure file:**
 ```bash
-# Move infrastructure files
-mv main-infrastructure.tf main-infra.tf
-mv infrastructure-variables.tf infra-vars.tf  
-mv infrastructure-outputs.tf infra-outputs.tf
+# Rename infrastructure file
+mv main-infrastructure.tf infrastructure.tf
 
 # List files to confirm
 ls -la *.tf

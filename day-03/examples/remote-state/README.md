@@ -51,12 +51,10 @@ Edit `main.tf` and update the backend configuration with your actual bucket name
 sed -i "s/terraform-state-demo-12345678/$BUCKET_NAME/g" main.tf
 ```
 
-#### Step 4: Move Infrastructure Files
+#### Step 4: Rename Infrastructure File
 ```bash
-# Move infrastructure files to avoid conflicts
-mv main-infrastructure.tf main-infra.tf
-mv infrastructure-variables.tf infra-vars.tf
-mv infrastructure-outputs.tf infra-outputs.tf
+# Rename infrastructure file for clarity
+mv main-infrastructure.tf infrastructure.tf
 ```
 
 #### Step 5: Initialize Remote Backend

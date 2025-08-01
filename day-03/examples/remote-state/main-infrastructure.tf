@@ -1,5 +1,5 @@
-# Main Infrastructure Configuration
-# This file contains the actual infrastructure resources
+# Infrastructure Resources
+# This file contains the actual infrastructure resources for remote state demo
 
 # Data source for latest Amazon Linux AMI
 data "aws_ami" "amazon_linux" {

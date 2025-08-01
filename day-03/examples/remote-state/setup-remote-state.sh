@@ -17,16 +17,10 @@ echo "Step 2: Updating backend configuration..."
 sed -i.bak "s/terraform-state-demo-12345678/$BUCKET_NAME/g" main.tf
 echo "✅ Backend configuration updated"
 
-# Step 4: Rename infrastructure files to avoid conflicts
+# Step 4: Rename infrastructure file to main infrastructure
 echo "Step 3: Organizing files..."
 if [ -f "main-infrastructure.tf" ]; then
-    mv main-infrastructure.tf main-infra.tf
-fi
-if [ -f "infrastructure-variables.tf" ]; then
-    mv infrastructure-variables.tf infra-vars.tf
-fi
-if [ -f "infrastructure-outputs.tf" ]; then
-    mv infrastructure-outputs.tf infra-outputs.tf
+    mv main-infrastructure.tf infrastructure.tf
 fi
 
 # Step 5: Initialize remote backend

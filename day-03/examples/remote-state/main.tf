@@ -1,5 +1,6 @@
-# Remote State Example - EC2 with S3 Backend
-# This demonstrates remote state management with S3 and DynamoDB
+# Remote State Example - Backend Configuration Only
+# This file contains only the backend configuration
+# Infrastructure resources are in separate files
 
 terraform {
   required_version = ">= 1.0"
@@ -13,6 +14,17 @@ terraform {
     encrypt        = true
     dynamodb_table = "terraform-state-locks"
   }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
 }
 
 # Data source for latest Amazon Linux AMI
