@@ -57,22 +57,22 @@ terraform import aws_security_group.web_sg $SG_ID
 
 ## 🌐 PART 2: REMOTE STATE (S3 + DynamoDB)
 
-### Navigate to Clean Remote State Example
+### Navigate to Remote State Example
 ```bash
-cd ../remote-state-clean
+cd ../remote-state
 ```
 
 ### Phase 1: Create Backend Infrastructure
 ```bash
 # Copy backend setup
-cp 01-backend-setup.tf main.tf
+cp backend.tf main.tf
 
 # Create S3 bucket and DynamoDB table
 terraform init
 terraform apply
 
 # Get bucket name
-BUCKET_NAME=$(terraform output -raw s3_bucket_name)
+BUCKET_NAME=$(terraform output -raw bucket_name)
 echo "Bucket: $BUCKET_NAME"
 ```
 
@@ -82,10 +82,10 @@ echo "Bucket: $BUCKET_NAME"
 rm main.tf terraform.tfstate*
 
 # Copy infrastructure config
-cp 02-main-infrastructure.tf main.tf
+cp main.tf.template main.tf
 
 # Update with real bucket name
-sed -i "s/terraform-state-demo-XXXXXXXX/$BUCKET_NAME/g" main.tf
+sed -i "s/UPDATE-WITH-ACTUAL-BUCKET-NAME/$BUCKET_NAME/g" main.tf
 
 # Initialize with remote backend
 terraform init

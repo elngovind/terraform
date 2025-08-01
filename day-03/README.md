@@ -9,7 +9,7 @@ day-03/
 ├── COMPLETE-LECTURE-GUIDE.md    # ← USE THIS FOR LECTURE
 ├── examples/
 │   ├── basic-state/             # Part 1: Local state demo
-│   ├── remote-state-clean/      # Part 2: Remote state demo  
+│   ├── remote-state/           # Part 2: Remote state demo  
 │   ├── vpc-ec2-demo/           # Part 3: Complex infrastructure
 │   └── 3-tier-app/             # Part 4: Production example
 └── README.md                   # This file
@@ -23,7 +23,7 @@ day-03/
 
 ## 📋 What Each Example Demonstrates
 - **basic-state**: Local state fundamentals
-- **remote-state-clean**: S3 + DynamoDB backend setup
+- **remote-state**: S3 + DynamoDB backend setup
 - **vpc-ec2-demo**: Multi-resource infrastructure
 - **3-tier-app**: Production-scale architecture (50+ resources)
 

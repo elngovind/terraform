@@ -1,0 +1,29 @@
+# Remote State Demo Commands
+
+# Step 1: Create Backend
+cp backend.tf main.tf
+terraform init
+terraform apply
+BUCKET=$(terraform output -raw bucket_name)
+echo "Bucket: $BUCKET"
+
+# Step 2: Switch to Remote State  
+rm main.tf terraform.tfstate*
+cp main.tf.template main.tf
+sed -i "s/UPDATE-WITH-ACTUAL-BUCKET-NAME/$BUCKET/g" main.tf
+terraform init
+terraform apply
+
+# Step 3: Verify Remote State
+terraform state list
+aws s3 ls s3://$BUCKET/demo/
+
+# Step 4: State Operations
+terraform state show aws_instance.demo
+terraform state rm aws_security_group.demo
+terraform plan
+SG_ID=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=remote-state-demo-*" --query 'SecurityGroups[0].GroupId' --output text)
+terraform import aws_security_group.demo $SG_ID
+
+# Cleanup
+terraform destroy
